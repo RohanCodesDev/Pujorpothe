@@ -1012,3 +1012,46 @@ button:active, a:active, [role="button"]:active, select:active, .glass-input:act
   box-shadow: 0 8px 30px rgba(0,0,0,0.6), inset 0 0 15px rgba(254,240,138,0.2);
   transform: translateY(-2px) scale(1.05);
 }
+
+/* =========================================
+   DESKTOP BLOCKER
+   ========================================= */
+#desktop-blocker {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  #desktop-blocker {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    background: #060001;
+    z-index: 9999999;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .desktop-blocker-message h2 {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: #fef08a;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+  
+  .desktop-blocker-message p {
+    font-family: var(--font-body);
+    font-size: 1.25rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.5;
+  }
+  
+  #app-content {
+    display: none !important;
+  }
+}

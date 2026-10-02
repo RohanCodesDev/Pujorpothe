@@ -42,12 +42,21 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <Navbar />
-        <main>{children}</main>
-        
-        <BackToTop />
-        
-        <GlobalFooter />
+        <div id="desktop-blocker">
+          <div className="desktop-blocker-message">
+            <h2>This Site was designed for Mobile Devices.</h2>
+            <p>Please open in your phone for the best experience.</p>
+          </div>
+        </div>
+
+        <div id="app-content">
+          <Navbar />
+          <main>{children}</main>
+          
+          <BackToTop />
+          
+          <GlobalFooter />
+        </div>
       </body>
     </html>
   );
