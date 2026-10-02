@@ -54,7 +54,7 @@ export default function RootLayout({
           zIndex: 10,
           opacity: 0.8
         }}>
-          Made with love by RohanCodesDev
+          Made with love by Rohan
         </footer>
       </body>
     </html>

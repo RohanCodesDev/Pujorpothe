@@ -95,15 +95,44 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile full-screen menu overlay */}
-      <div className={`nav-mobile-menu${menuOpen ? ' open' : ''}`} role="dialog" aria-modal="true">
+      <div className={`nav-mobile-menu${menuOpen ? ' open' : ''}`} role="dialog" aria-modal="true" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', padding: '60px 40px' }}>
         <button className="nav-mobile-close" onClick={() => setMenuOpen(false)} aria-label="Close menu">✕</button>
 
-        {NAV_LINKS.map(item => (
-          <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className="sidebar-link">
-            {item.label}
-          </Link>
-        ))}
+        {/* Mobile Menu Logo */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginBottom: '3rem', gap: '16px' }}>
+          <div style={{ width: 60, height: 60, borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(201, 168, 76, 0.5)', flexShrink: 0 }}>
+            <Image src={imageMap.logo} alt="পুজোর পথে" width={60} height={60} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+          </div>
+          <div style={{ textAlign: 'left' }}>
+            <div style={{ fontFamily: 'var(--font-bengali)', fontSize: 24, fontWeight: 600, color: '#fff', lineHeight: 1, marginBottom: '6px' }}>
+              পুজোর পথে
+            </div>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 12, color: 'var(--gold)', letterSpacing: '0.1em' }}>
+              Discover the Puja · Follow the Path
+            </div>
+          </div>
+        </div>
 
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '1.5rem', flex: 1 }}>
+          {NAV_LINKS.map(item => (
+            <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className="sidebar-link">
+              {item.label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Mobile Menu Footer */}
+        <div style={{
+          textAlign: 'left',
+          fontFamily: 'var(--font-display)',
+          fontSize: '1rem',
+          color: '#fef08a',
+          opacity: 0.8,
+          marginTop: 'auto',
+          paddingBottom: '20px'
+        }}>
+          Made with love by RohanCodesDev
+        </div>
       </div>
     </>
   );
