@@ -28,6 +28,7 @@ export default function ExplorePage() {
 
   const [visibleCount, setVisibleCount] = useState(5);
   const [showMap, setShowMap] = useState(false);
+  const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
 
   const metroLines = ['Blue Line', 'Green Line', 'Orange Line', 'Purple Line'];
 
@@ -97,7 +98,12 @@ export default function ExplorePage() {
       flexDirection: 'column',
       paddingTop: 'calc(var(--nav-height) + 40px)',
       paddingBottom: '6rem',
+      overflowX: 'hidden'
     }}>
+      {/* Background Elements */}
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.06) 0%, rgba(136, 19, 19, 0.02) 50%, transparent 100%)', animation: 'pulse 8s infinite alternate ease-in-out', pointerEvents: 'none', zIndex: 0 }} />
+      <div style={{ position: 'absolute', right: 0, top: '50%', transform: 'translate(50%, -50%)', width: '700px', height: '800px', opacity: 0.07, zIndex: 0, pointerEvents: 'none', animation: 'spin-slow 175s linear infinite', backgroundImage: 'url(/mandalabg.svg)', backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }} />
+
       <div style={{ maxWidth: '900px', width: '100%', margin: '0 auto', padding: '0 24px', zIndex: 10 }}>
 
         {/* Header & Immersive Search */}
@@ -107,24 +113,20 @@ export default function ExplorePage() {
             placeholder="Search pandals..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            className="glass-input"
             style={{
               width: '100%',
-              background: 'transparent',
-              border: 'none',
-              color: '#fff',
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(3rem, 8vw, 5rem)',
-              outline: 'none',
-              padding: '0',
-              marginBottom: '24px',
-              lineHeight: 1
+              marginBottom: '32px',
+              padding: '16px 24px',
+              fontSize: '1.2rem',
+              borderRadius: '24px'
             }}
           />
 
-          {/* Controls (Filters & Actions) - purely text based, no borders */}
+          {/* Controls (Filters & Actions) */}
           <div style={{
             display: 'flex',
-            gap: '32px',
+            gap: '40px 32px',
             alignItems: 'center',
             flexWrap: 'wrap',
             fontFamily: 'var(--font-body)',
@@ -132,79 +134,79 @@ export default function ExplorePage() {
             color: 'rgba(255,255,255,0.6)'
           }}>
 
-            {/* Filter Dropdowns styled as inline text */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span>Show</span>
-              <select
-                value={filterType}
-                onChange={(e) => {
-                  setFilterType(e.target.value as 'region' | 'metro');
-                  setSelectedFilterValue('all');
-                }}
-                style={{
-                  appearance: 'none', WebkitAppearance: 'none',
-                  background: 'transparent', border: 'none', color: '#fff',
-                  fontFamily: 'var(--font-body)', fontSize: '1rem', outline: 'none', cursor: 'pointer',
-                  paddingRight: '16px',
-                  backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='rgba(255,255,255,0.5)' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>")`,
-                  backgroundRepeat: 'no-repeat', backgroundPosition: 'right center'
-                }}
-              >
-                <option value="region" style={{ background: '#111' }}>regions</option>
-                <option value="metro" style={{ background: '#111' }}>metro lines</option>
-              </select>
+            {/* Filter Dropdowns */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.95rem' }}>Show:</span>
+                <select
+                  value={filterType}
+                  className="minimal-dropdown"
+                  onChange={(e) => {
+                    setFilterType(e.target.value as 'region' | 'metro');
+                    setSelectedFilterValue('all');
+                  }}
+                >
+                  <option value="region">Regions</option>
+                  <option value="metro">Metro Lines</option>
+                </select>
+              </div>
 
-              <span>:</span>
-              <select
-                value={selectedFilterValue}
-                onChange={(e) => setSelectedFilterValue(e.target.value)}
-                style={{
-                  appearance: 'none', WebkitAppearance: 'none',
-                  background: 'transparent', border: 'none', color: '#fff',
-                  fontFamily: 'var(--font-body)', fontSize: '1rem', outline: 'none', cursor: 'pointer',
-                  paddingRight: '16px',
-                  backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='rgba(255,255,255,0.5)' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>")`,
-                  backgroundRepeat: 'no-repeat', backgroundPosition: 'right center'
-                }}
-              >
-                <option value="all" style={{ background: '#111' }}>All</option>
-                {filterType === 'region'
-                  ? regions.map(r => <option key={r.id} value={r.id} style={{ background: '#111' }}>{r.name}</option>)
-                  : metroLines.map(m => <option key={m} value={m} style={{ background: '#111' }}>{m}</option>)
-                }
-              </select>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <select
+                  value={selectedFilterValue}
+                  className="minimal-dropdown"
+                  onChange={(e) => setSelectedFilterValue(e.target.value)}
+                >
+                  <option value="all">All</option>
+                  {filterType === 'region'
+                    ? regions.map(r => <option key={r.id} value={r.id}>{r.name}</option>)
+                    : metroLines.map(m => <option key={m} value={m}>{m}</option>)
+                  }
+                </select>
+              </div>
             </div>
 
             {/* Action Links */}
             <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-              <span
+              <button
                 onClick={handleLocate}
                 style={{
-                  color: useLocation ? '#fef08a' : 'inherit',
+                  background: useLocation ? 'rgba(254, 240, 138, 0.15)' : 'rgba(255,255,255,0.05)',
+                  border: `1px solid ${useLocation ? '#fef08a' : 'rgba(255,255,255,0.2)'}`,
+                  color: useLocation ? '#fef08a' : '#fff',
+                  padding: '8px 20px',
+                  borderRadius: '30px',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.95rem',
                   cursor: locationLoading ? 'wait' : 'pointer',
-                  transition: 'color 0.2s',
-                  display: 'flex', alignItems: 'center', gap: '6px'
+                  transition: 'all 0.3s ease',
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  boxShadow: useLocation ? '0 0 15px rgba(254, 240, 138, 0.1)' : 'none'
                 }}
-                onMouseOver={(e) => { if (!useLocation) e.currentTarget.style.color = '#fff'; }}
-                onMouseOut={(e) => { if (!useLocation) e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; }}
               >
                 <span style={{ fontSize: '1.2rem' }}>⌖</span>
-                {locationLoading ? 'Locating...' : useLocation ? 'Sorted by Nearby' : 'Near Me'}
-              </span>
+                {locationLoading ? 'Locating...' : useLocation ? 'Sorted by Nearest' : 'Sort by Nearest'}
+              </button>
 
-              <span
+              <button
                 onClick={() => setShowMap(!showMap)}
                 style={{
+                  background: showMap ? 'rgba(254, 240, 138, 0.15)' : 'rgba(255,255,255,0.05)',
+                  border: `1px solid ${showMap ? '#fef08a' : 'rgba(255,255,255,0.2)'}`,
+                  color: showMap ? '#fef08a' : '#fff',
+                  padding: '8px 20px',
+                  borderRadius: '30px',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.95rem',
                   cursor: 'pointer',
-                  transition: 'color 0.2s',
-                  display: 'flex', alignItems: 'center', gap: '6px'
+                  transition: 'all 0.3s ease',
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  boxShadow: showMap ? '0 0 15px rgba(254, 240, 138, 0.1)' : 'none'
                 }}
-                onMouseOver={(e) => e.currentTarget.style.color = '#fff'}
-                onMouseOut={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
               >
                 <span style={{ fontSize: '1.2rem' }}>◖</span>
                 {showMap ? 'Hide Map' : 'Map View'}
-              </span>
+              </button>
             </div>
 
           </div>
@@ -215,38 +217,41 @@ export default function ExplorePage() {
           <div style={{ height: '400px', marginBottom: '60px', borderRadius: '8px', overflow: 'hidden' }}>
             <MapView
               pandals={processedPandals}
-              center={userLat && userLng ? [userLat, userLng] : [22.5726, 88.3639]}
-              zoom={13}
+              center={mapCenter || (userLat && userLng ? [userLat, userLng] : [22.5726, 88.3639])}
+              zoom={mapCenter ? 15 : 13}
               height="100%"
             />
           </div>
         )}
 
         {/* List View */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '60px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
           {displayedPandals.map((pandal, i) => (
             <div key={pandal.id} style={{
               display: 'flex',
               alignItems: 'flex-start',
-              gap: '32px'
+              gap: '32px',
+              borderBottom: i < displayedPandals.length - 1 ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
+              paddingBottom: i < displayedPandals.length - 1 ? '32px' : '0'
             }}>
               <div style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: '1.2rem',
-                color: 'rgba(255,255,255,0.2)',
-                paddingTop: '8px',
+                fontSize: '1.6rem',
+                color: '#fef08a',
+                fontWeight: 700,
+                paddingTop: '4px',
                 userSelect: 'none'
               }}>
                 {(i + 1).toString().padStart(2, '0')}
               </div>
 
-              <div style={{ flex: 1 }}>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', color: '#fff', marginBottom: '4px', lineHeight: 1.1 }}>
-                  {pandal.name}
-                  <span style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.4)', marginLeft: '12px', fontWeight: 'normal' }}>{pandal.bengaliName}</span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', color: '#fff', marginBottom: '12px', lineHeight: 1.1, display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{pandal.name}</span>
+                  <span style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.4)', fontWeight: 'normal', marginTop: '2px' }}>{pandal.bengaliName}</span>
                 </h3>
 
-                <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '16px' }}>
+                <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '20px' }}>
                   <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: '#fef08a', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                     {pandal.region.replace('-', ' ')}
                   </span>
@@ -257,30 +262,57 @@ export default function ExplorePage() {
                   )}
                 </div>
 
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', color: 'rgba(255,255,255,0.6)', maxWidth: '650px', marginBottom: '24px', lineHeight: 1.6 }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '1.05rem', color: 'rgba(255,255,255,0.6)', maxWidth: '650px', marginBottom: '32px', lineHeight: 1.65 }}>
                   {pandal.description}
                 </p>
 
-                <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${pandal.lat},${pandal.lng}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '0.95rem',
-                    color: '#fff',
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    transition: 'opacity 0.2s',
-                    opacity: 0.8
-                  }}
-                  onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
-                  onMouseOut={(e) => e.currentTarget.style.opacity = '0.8'}
-                >
-                  Directions ↗
-                </a>
+                <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${pandal.lat},${pandal.lng}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '0.9rem',
+                      color: '#000',
+                      background: '#fef08a',
+                      padding: '8px 20px',
+                      borderRadius: '24px',
+                      textDecoration: 'none',
+                      fontWeight: 600,
+                      transition: 'opacity 0.2s',
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
+                    onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+                  >
+                    ↗ Directions
+                  </a>
+                  <button
+                    onClick={() => {
+                      setMapCenter([pandal.lat, pandal.lng]);
+                      setShowMap(true);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '0.9rem',
+                      color: '#fff',
+                      background: 'rgba(255,255,255,0.05)',
+                      border: '1px solid rgba(255,255,255,0.2)',
+                      padding: '8px 20px',
+                      borderRadius: '24px',
+                      cursor: 'pointer',
+                      transition: 'background 0.2s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+                    onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+                  >
+                    <span style={{ fontSize: '1.1rem' }}>◖</span> View in Map
+                  </button>
+                </div>
               </div>
             </div>
           ))}

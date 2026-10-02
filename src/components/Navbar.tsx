@@ -9,7 +9,7 @@ import { imageMap } from '@/lib/data';
 const NAV_LINKS = [
   { label: 'Metro Guide', href: '/metro' },
   { label: 'Explore Pandals', href: '/explore' },
-  { label: 'About', href: '/about' },
+  { label: 'Helplines', href: '/helplines' },
 ];
 
 export default function Navbar() {
@@ -104,23 +104,6 @@ export default function Navbar() {
           </Link>
         ))}
 
-        <Link
-          href="/explore"
-          onClick={() => setMenuOpen(false)}
-          style={{
-            marginTop: '1rem',
-            padding: '14px 40px',
-            background: 'var(--vermilion)',
-            color: '#fff',
-            borderRadius: '100px',
-            fontFamily: 'var(--font-body)',
-            fontSize: '1.1rem',
-            fontWeight: 600,
-            letterSpacing: '0.04em',
-          }}
-        >
-          Explore Now →
-        </Link>
       </div>
     </>
   );

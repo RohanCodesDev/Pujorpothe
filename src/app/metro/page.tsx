@@ -282,7 +282,7 @@ export default function MetroGuidePage() {
             key={`desc-${current.id}`}
             style={{
               fontFamily: 'var(--font-body)',
-              fontSize: '1.15rem',
+              fontSize: '1.25rem',
               color: 'rgba(255, 255, 255, 0.7)',
               maxWidth: '600px',
               margin: '0 auto',
@@ -328,7 +328,7 @@ export default function MetroGuidePage() {
               <div style={{ flex: 1, paddingBottom: '32px' }}>
                 <h3 className="metro-station-name" style={{
                   fontFamily: 'var(--font-display)',
-                  fontSize: '2.5rem',
+                  fontSize: '2.8rem',
                   color: '#fff',
                   marginBottom: '20px',
                   lineHeight: 1,
@@ -345,7 +345,7 @@ export default function MetroGuidePage() {
                     onClick={() => openModal(pandal, station.stop)}
                     style={{
                       fontFamily: 'var(--font-body)',
-                      fontSize: '1.05rem',
+                      fontSize: '1.15rem',
                       fontWeight: 500,
                       color: 'rgba(255,255,255,0.85)',
                       display: 'flex',
@@ -366,11 +366,11 @@ export default function MetroGuidePage() {
                     >
                       <span style={{ 
                         fontFamily: 'var(--font-display)',
-                        fontSize: '1.3rem', 
-                        color: 'rgba(255,255,255,0.2)', 
-                        fontWeight: 600,
+                        fontSize: '1.5rem', 
+                        color: current.color, 
+                        fontWeight: 700,
                         userSelect: 'none',
-                        width: '24px' // Ensures consistent alignment
+                        width: '28px' 
                       }}>
                         {(pIdx + 1).toString().padStart(2, '0')}
                       </span>

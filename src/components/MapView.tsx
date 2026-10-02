@@ -121,6 +121,7 @@ export default function MapView({
               ${pandal.description.slice(0, 80)}...
             </div>
             <div style="display: flex; gap: 8px; align-items: center; justify-content: space-between;">
+              ${pandal.distanceKm !== undefined ? `
               <span style="
                 padding: 3px 10px;
                 background: rgba(193,57,43,0.1);
@@ -129,8 +130,9 @@ export default function MapView({
                 font-size: 11px;
                 font-weight: 500;
               ">
-                ${pandal.style[0]}
+                ${pandal.distanceKm.toFixed(1)} km away
               </span>
+              ` : '<span></span>'}
               <a href="https://www.google.com/maps/dir/?api=1&destination=${pandal.lat},${pandal.lng}" target="_blank" rel="noreferrer" style="
                 color: #3b82f6;
                 text-decoration: underline;

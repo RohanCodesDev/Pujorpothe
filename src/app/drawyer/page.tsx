@@ -343,46 +343,6 @@ export default function DrawyerPage() {
           from { transform: translate(50%, -50%) rotate(0deg); }
           to { transform: translate(50%, -50%) rotate(360deg); }
         }
-        .glass-input {
-          background: rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          border-radius: 20px;
-          padding: 14px 24px;
-          color: white;
-          font-family: var(--font-body);
-          font-size: 1.05rem;
-          outline: none;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-        .search-box {
-          flex: 2 1 250px;
-        }
-        .dropdown {
-          flex: 1 1 200px;
-          cursor: pointer;
-          appearance: none;
-          background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.7)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-          background-repeat: no-repeat;
-          background-position: right 1rem center;
-          background-size: 1em;
-          padding-right: 2.5rem;
-        }
-        .glass-input:focus {
-          border-color: rgba(254, 240, 138, 0.6);
-          background: rgba(255, 255, 255, 0.08);
-          box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
-        }
-        .glass-input::placeholder {
-          color: rgba(255, 255, 255, 0.5);
-        }
-        .glass-input option {
-          background: #1c0305;
-          color: white;
-          padding: 10px;
-        }
 
         /* Pandal row */
         .pandal-row {
