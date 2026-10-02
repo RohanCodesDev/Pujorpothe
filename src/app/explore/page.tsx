@@ -77,7 +77,23 @@ export default function ExplorePage() {
 
     if (search.trim()) {
       const q = search.toLowerCase();
-      result = result.filter(p => p.name.toLowerCase().includes(q) || p.bengaliName.includes(q));
+      result = result.filter(p => {
+        return (
+          p.name.toLowerCase().includes(q) ||
+          (p.bengaliName && p.bengaliName.includes(q)) ||
+          (p.description && p.description.toLowerCase().includes(q)) ||
+          (p.theme && p.theme.toLowerCase().includes(q)) ||
+          (p.history && p.history.toLowerCase().includes(q)) ||
+          (p.region && p.region.replace(/-/g, ' ').includes(q)) ||
+          (p.style && p.style.some(s => s.toLowerCase().includes(q))) ||
+          (p.crowd && p.crowd.toLowerCase().includes(q)) ||
+          (p.experience && p.experience.some(e => e.toLowerCase().includes(q))) ||
+          (p.committee && p.committee.toLowerCase().includes(q)) ||
+          (p.established && p.established.includes(q)) ||
+          (p.timings && p.timings.toLowerCase().includes(q)) ||
+          (p.crowdInfo && p.crowdInfo.toLowerCase().includes(q))
+        );
+      });
     }
 
     if (selectedFilterValue !== 'all') {
