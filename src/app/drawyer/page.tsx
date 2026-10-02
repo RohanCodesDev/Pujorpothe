@@ -13,56 +13,56 @@ function w(filename: string, width = 200): string {
 // Each pandal id maps to a verified Wikimedia Commons filename.
 const PANDAL_IMAGES: Record<string, string> = {
   // ── South Kolkata ────────────────────────────────────────────────
-  'deshapriya-park':    w('Deshpriyo_Park_Pandal_Arnab_Dutta_2010.JPG'),
-  'tridhara':           w('2016_Tridhara_Sammilani_Durga_Puja_02.jpg'),
+  'deshapriya-park': w('Deshpriyo_Park_Pandal_Arnab_Dutta_2010.JPG'),
+  'tridhara': w('2016_Tridhara_Sammilani_Durga_Puja_02.jpg'),
   'tridhara-sammilani': w('2016_Tridhara_Sammilani_Durga_Puja_02.jpg'),
-  'mudiali':            w('Mudiali_club_Durga_puja_kolkata_2019_IMG_20191005_125557_09.jpg'),
-  'mudiali-club':       w('Mudiali_club_Durga_puja_kolkata_2019_IMG_20191005_125557_09.jpg'),
-  'chetla-agrani':      w('Chetla_Agrani_Club,_Durga_Puja_2025.jpg'),
-  'suruchi-sangha':     w('Suruchi_Sangha_Durga_Puja_2019.jpg'),
-  'ekdalia-evergreen':  w('2014_Durga_Puja_Bagbazar_Pandal,_Kolkata.jpg'),
-  'ballygunge-cultural':w('Baghbazar_Sarbojanin.jpg'),
-  'maddox-square':      w('Bagbazar_Sarbojonin_Durgotsov.jpg'),
+  'mudiali': w('Mudiali_club_Durga_puja_kolkata_2019_IMG_20191005_125557_09.jpg'),
+  'mudiali-club': w('Mudiali_club_Durga_puja_kolkata_2019_IMG_20191005_125557_09.jpg'),
+  'chetla-agrani': w('Chetla_Agrani_Club,_Durga_Puja_2025.jpg'),
+  'suruchi-sangha': w('Suruchi_Sangha_Durga_Puja_2019.jpg'),
+  'ekdalia-evergreen': w('2014_Durga_Puja_Bagbazar_Pandal,_Kolkata.jpg'),
+  'ballygunge-cultural': w('Baghbazar_Sarbojanin.jpg'),
+  'maddox-square': w('Bagbazar_Sarbojonin_Durgotsov.jpg'),
 
   // ── North Kolkata ────────────────────────────────────────────────
-  'college-square':     w('Durga_Puja_Pandal_-_Kumartuly_Sarvojanin_-_Kumartuli_Park_-_Kolkata_2013-10-13_01853.jpg'),
-  'bagbazar':           w('2014_Durga_Puja_Bagbazar_Pandal,_Kolkata.jpg'),
-  'baghbazaar':         w('Baghbazar_Sarbojanin.jpg'),
-  'kumartuli-park':     w('Durga_Puja_Pandal_-_Kumartuly_Sarvojanin_-_Kumartuli_Park_-_Kolkata_2013-10-13_01853.jpg'),
-  'sovabazar-rajbari':  w('Bagbazar_13.JPG'),
+  'college-square': w('Durga_Puja_Pandal_-_Kumartuly_Sarvojanin_-_Kumartuli_Park_-_Kolkata_2013-10-13_01853.jpg'),
+  'bagbazar': w('2014_Durga_Puja_Bagbazar_Pandal,_Kolkata.jpg'),
+  'baghbazaar': w('Baghbazar_Sarbojanin.jpg'),
+  'kumartuli-park': w('Durga_Puja_Pandal_-_Kumartuly_Sarvojanin_-_Kumartuli_Park_-_Kolkata_2013-10-13_01853.jpg'),
+  'sovabazar-rajbari': w('Bagbazar_13.JPG'),
   'hatibagan-sarbojanin': w('Bagbazzar_sarbojonin\'14.JPG'),
-  'ahiritola':          w('BagbazarDurga.jpg'),
-  'shyam-square':       w('5456g_baghbazar-pratima_crp.jpg'),
+  'ahiritola': w('BagbazarDurga.jpg'),
+  'shyam-square': w('5456g_baghbazar-pratima_crp.jpg'),
   'baranagar-netaji-colony': w('Durga_Puja_Pandal_-_Kumartuly_Sarvojanin_-_Kumartuli_Park_-_Kolkata_2013-10-13_01853.jpg'),
   'alambazar-sarbojanin': w('5452g_baghbazar_advertisements.jpg'),
   'santosh-mitra-square': w('Bagbazar_13.JPG'),
-  'sreebhumi':          w('Sreebhumi_sporting_club_2023.jpg'),
-  'md-ali-park':        w('BagbazarDurga.jpg'),
-  'tala-pratyay':       w('Bagbazzar_sarbojonin\'14.JPG'),
-  'tala-park':          w('5456g_baghbazar-pratima_crp.jpg'),
-  'beniatola':          w('5452g_baghbazar_advertisements.jpg'),
-  'friend-s-union':     w('Bagbazar_13.JPG'),
+  'sreebhumi': w('Sreebhumi_sporting_club_2023.jpg'),
+  'md-ali-park': w('BagbazarDurga.jpg'),
+  'tala-pratyay': w('Bagbazzar_sarbojonin\'14.JPG'),
+  'tala-park': w('5456g_baghbazar-pratima_crp.jpg'),
+  'beniatola': w('5452g_baghbazar_advertisements.jpg'),
+  'friend-s-union': w('Bagbazar_13.JPG'),
   'jagat-mukherjee-park': w('Baghbazar_Sarbojanin.jpg'),
 
   // ── Salt Lake ────────────────────────────────────────────────────
-  'salt-lake-fd':       w('Baghbazar_Sarbojanin.jpg'),
-  'fd-block':           w('Baghbazar_Sarbojanin.jpg'),
+  'salt-lake-fd': w('Baghbazar_Sarbojanin.jpg'),
+  'fd-block': w('Baghbazar_Sarbojanin.jpg'),
   'central-park-sarbojanin': w('2016_Tridhara_Sammilani_Durga_Puja_02.jpg'),
 
   // ── New Town ─────────────────────────────────────────────────────
-  'new-town-eco':       w('2016_Tridhara_Sammilani_Durga_Puja_02.jpg'),
+  'new-town-eco': w('2016_Tridhara_Sammilani_Durga_Puja_02.jpg'),
 
   // ── Central / Other ──────────────────────────────────────────────
-  'adyapith':           w('Deshpriyo_Park_Pandal_Arnab_Dutta_2010.JPG'),
-  'dakshineswar':       w('Durga_Puja_Pandal_-_Kumartuly_Sarvojanin_-_Kumartuli_Park_-_Kolkata_2013-10-13_01853.jpg'),
+  'adyapith': w('Deshpriyo_Park_Pandal_Arnab_Dutta_2010.JPG'),
+  'dakshineswar': w('Durga_Puja_Pandal_-_Kumartuly_Sarvojanin_-_Kumartuli_Park_-_Kolkata_2013-10-13_01853.jpg'),
   'noapara-sarbojanin': w('Bagbazzar_sarbojonin\'14.JPG'),
   'chowwddar-pally-sarbojanin': w('BagbazarDurga.jpg'),
-  'sinthi-sarbojanin':  w('Bagbazar_13.JPG'),
+  'sinthi-sarbojanin': w('Bagbazar_13.JPG'),
   'natun-palli-pradeep-sangha': w('5452g_baghbazar_advertisements.jpg'),
-  'netaji-sporting':    w('5456g_baghbazar-pratima_crp.jpg'),
+  'netaji-sporting': w('5456g_baghbazar-pratima_crp.jpg'),
   'laketown-association': w('2014_Durga_Puja_Bagbazar_Pandal,_Kolkata.jpg'),
-  'bharatchakra':       w('2016_Tridhara_Sammilani_Durga_Puja_02.jpg'),
-  'dum-dum-park':       w('Suruchi_Sangha_Durga_Puja_2019.jpg'),
+  'bharatchakra': w('2016_Tridhara_Sammilani_Durga_Puja_02.jpg'),
+  'dum-dum-park': w('Suruchi_Sangha_Durga_Puja_2019.jpg'),
 };
 
 function getPandalImage(id: string): string {
@@ -85,8 +85,8 @@ export default function DrawyerPage() {
   const [search, setSearch] = useState('');
   const [region, setRegion] = useState('');
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
-  
-  const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
+
+  const [userLocation, setUserLocation] = useState<{ lat: number, lng: number } | null>(null);
   const [isLocating, setIsLocating] = useState(false);
   const [locationError, setLocationError] = useState('');
 
@@ -122,7 +122,7 @@ export default function DrawyerPage() {
     if (region) {
       result = result.filter(p => p.region === region);
     }
-    
+
     if (userLocation) {
       result = [...result].sort((a, b) => {
         const distA = getDistanceFromLatLonInKm(userLocation.lat, userLocation.lng, a.lat, a.lng);
@@ -130,7 +130,7 @@ export default function DrawyerPage() {
         return distA - distB;
       });
     }
-    
+
     return result;
   }, [search, region, userLocation]);
 
@@ -179,7 +179,7 @@ export default function DrawyerPage() {
       </div>
 
       <div style={{ position: 'relative', zIndex: 10, color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%', padding: '0 5%' }}>
-        
+
         {/* Search and Dropdown Container */}
         <div
           className="drawyer-search-row"
@@ -191,16 +191,16 @@ export default function DrawyerPage() {
             justifyContent: 'flex-start',
             marginBottom: '4rem'
           }}>
-          <input 
-            type="text" 
-            placeholder="Search pandals..." 
+          <input
+            type="text"
+            placeholder="Search pandals..."
             className="glass-input search-box"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <select 
-            className="glass-input dropdown" 
+          <select
+            className="glass-input dropdown"
             value={region}
             onChange={(e) => setRegion(e.target.value)}
           >
@@ -215,7 +215,7 @@ export default function DrawyerPage() {
 
         {/* Location Toggle */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '3rem', marginTop: '-2rem' }}>
-          <button 
+          <button
             onClick={toggleLocation}
             className="location-toggle-btn"
             style={{
@@ -301,30 +301,32 @@ export default function DrawyerPage() {
 
                     {/* Pandal info */}
                     <div className="pandal-info">
-                      <h3 className="pandal-name">
-                        {pandal.name}
-                        <span className="pandal-dir-tag">↗ Directions</span>
-                      </h3>
-                      <div className="pandal-bengali">
-                        {pandal.bengaliName}
-                        {userLocation && (
-                          <span style={{ fontSize: '0.85rem', color: '#a3e635', marginLeft: '12px', fontFamily: 'var(--font-body)' }}>
-                            {getDistanceFromLatLonInKm(userLocation.lat, userLocation.lng, pandal.lat, pandal.lng).toFixed(1)} km away
-                          </span>
-                        )}
+                      <div className="pandal-name" style={{ fontFamily: 'var(--font-display)', color: '#fff', lineHeight: 1.1, marginBottom: '4px', display: 'flex', flexDirection: 'column' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                          <span style={{ fontSize: '2.2rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{pandal.name}</span>
+                        </div>
+                        <div className="pandal-bengali" style={{ fontFamily: 'var(--font-bengali)', fontSize: '1.5rem', marginTop: '4px', color: 'rgba(254, 240, 138, 0.75)' }}>
+                          {pandal.bengaliName}
+                          {userLocation && (
+                            <span style={{ fontSize: '0.85rem', color: '#a3e635', marginLeft: '12px', fontFamily: 'var(--font-body)' }}>
+                              {getDistanceFromLatLonInKm(userLocation.lat, userLocation.lng, pandal.lat, pandal.lng).toFixed(1)} km away
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <div className="pandal-region">
                         {pandal.region.replace(/-/g, ' ')}
                       </div>
                       <div className="pandal-desc">
                         {pandal.description}
+                        <span className="pandal-dir-tag" style={{ display: 'inline-block', fontSize: '1.1rem', color: '#60a5fa', fontFamily: 'var(--font-body)', fontWeight: 400, opacity: 0.85, marginLeft: '10px' }}>↗ Directions</span>
                       </div>
                     </div>
                   </a>
                 </div>
               );
             })}
-            
+
             {displayedPandals.length === 0 && (
               <div style={{ padding: '2rem 0', color: 'rgba(255,255,255,0.6)', fontFamily: 'var(--font-body)' }}>
                 No pandals found. Try adjusting your search or region.
@@ -397,21 +399,17 @@ export default function DrawyerPage() {
         }
         .pandal-name {
           font-family: var(--font-display);
-          font-size: 1.45rem;
           color: #fff;
-          margin: 0 0 0.18rem 0;
+          margin: 0;
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          flex-wrap: wrap;
+          flex-direction: column;
           transition: color 0.2s ease;
-          line-height: 1.3;
         }
         .pandal-row:hover .pandal-name {
           color: #fef08a;
         }
         .pandal-dir-tag {
-          font-size: 0.78rem;
+          font-size: 1.1rem;
           color: #60a5fa;
           font-family: var(--font-body);
           font-weight: 400;
@@ -420,23 +418,21 @@ export default function DrawyerPage() {
         }
         .pandal-bengali {
           font-family: var(--font-bengali);
-          font-size: 1rem;
-          color: rgba(254, 240, 138, 0.75);
-          margin-bottom: 0.2rem;
+          margin-bottom: 4px;
         }
         .pandal-region {
           font-family: var(--font-body);
-          font-size: 0.82rem;
+          font-size: 0.85rem;
           color: rgba(255, 255, 255, 0.55);
-          text-transform: capitalize;
-          margin-bottom: 0.3rem;
-          letter-spacing: 0.02em;
+          text-transform: uppercase;
+          margin-bottom: 4px;
+          letter-spacing: 0.05em;
         }
         .pandal-desc {
           font-family: var(--font-body);
-          font-size: 0.82rem;
-          color: rgba(255, 255, 255, 0.38);
-          line-height: 1.45;
+          font-size: 1.05rem;
+          color: rgba(255, 255, 255, 0.6);
+          line-height: 1.65;
         }
 
         /* ── Mobile Size Boosts ── */
@@ -453,14 +449,10 @@ export default function DrawyerPage() {
             font-size: 1.7rem;
           }
           .pandal-name {
-            font-size: 1.75rem;
-            margin-bottom: 0.25rem;
-          }
-          .pandal-bengali {
-            font-size: 1.15rem;
+            margin-bottom: 10px;
           }
           .pandal-region, .pandal-desc {
-            font-size: 0.95rem;
+            font-size: 1rem;
           }
           .pandal-dir-tag {
             font-size: 0.85rem;
