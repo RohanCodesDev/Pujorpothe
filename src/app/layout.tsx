@@ -1,15 +1,20 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Hind_Siliguri, Noto_Serif_Bengali, Cormorant_Garamond, Josefin_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import BackToTop from "@/components/BackToTop";
 import GlobalFooter from "@/components/GlobalFooter";
 import LenisScroll from "@/components/LenisScroll";
+import PwaRegister from "@/components/PwaRegister";
 
 const hindSiliguri = Hind_Siliguri({ subsets: ["bengali"], weight: ["300", "400", "500", "600", "700"], variable: "--font-bengali" });
 const notoSerifBengali = Noto_Serif_Bengali({ subsets: ["bengali"], weight: ["300", "400", "500", "600", "700"], variable: "--font-bengali-serif" });
 const cormorant = Cormorant_Garamond({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], style: ["normal", "italic"], variable: "--font-display" });
 const josefin = Josefin_Sans({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], variable: "--font-body" });
+
+export const viewport: Viewport = {
+  themeColor: "#060001",
+};
 
 export const metadata: Metadata = {
   title: "পুজোর পথে — Discover the Puja, Follow the Path",
@@ -31,6 +36,14 @@ export const metadata: Metadata = {
     locale: "bn_IN",
     type: "website",
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Pujor Pothe",
+  },
+  icons: {
+    apple: "/images/pujorpothe_logo_1790874648371.jpg",
+  },
 };
 
 export default function RootLayout({
@@ -44,6 +57,7 @@ export default function RootLayout({
       </head>
       <body className={`${hindSiliguri.variable} ${notoSerifBengali.variable} ${cormorant.variable} ${josefin.variable}`}>
         <LenisScroll />
+        <PwaRegister />
         <div id="desktop-blocker">
           <div className="desktop-blocker-message">
             <h2>This Site was designed for Mobile Devices.</h2>
