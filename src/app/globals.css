@@ -1,0 +1,692 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Serif+Bengali:wght@100..900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+/* =========================================
+   DESIGN TOKENS
+   ========================================= */
+:root {
+  /* Colors */
+  --ivory: #FAF7F2;
+  --ivory-dark: #F2EDE4;
+  --vermilion: #C1392B;
+  --vermilion-dark: #8B1A1A;
+  --vermilion-light: #E8503A;
+  --maroon: #6B1F1F;
+  --charcoal: #2A2420;
+  --charcoal-mid: #3D3530;
+  --charcoal-light: #5C5047;
+  --gold: #C9A84C;
+  --gold-light: #E2C575;
+  --gold-pale: #F5E6B8;
+  --muted-green: #4A6741;
+  --muted-green-light: #6B8F67;
+  --cream: #FDF8EF;
+  --warm-white: #FFFBF5;
+
+  /* Typography */
+  --font-bengali: 'Hind Siliguri', 'Noto Serif Bengali', sans-serif;
+  --font-bengali-serif: 'Noto Serif Bengali', serif;
+  --font-display: 'Cormorant Garamond', serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Spacing */
+  --nav-height: 72px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(42, 36, 32, 0.08);
+  --shadow-md: 0 4px 16px rgba(42, 36, 32, 0.12);
+  --shadow-lg: 0 8px 32px rgba(42, 36, 32, 0.18);
+  --shadow-xl: 0 20px 60px rgba(42, 36, 32, 0.24);
+  --shadow-glow: 0 0 30px rgba(193, 57, 43, 0.25);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-mid: 300ms ease;
+  --transition-slow: 600ms ease;
+}
+
+/* =========================================
+   RESET & BASE
+   ========================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--ivory);
+  color: var(--charcoal);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================================
+   TYPOGRAPHY
+   ========================================= */
+.font-bengali { font-family: var(--font-bengali); }
+.font-bengali-serif { font-family: var(--font-bengali-serif); }
+.font-display { font-family: var(--font-display); }
+.font-body { font-family: var(--font-body); }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  line-height: 1.2;
+  color: var(--charcoal);
+}
+
+/* =========================================
+   SCROLLBAR
+   ========================================= */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ivory-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--vermilion);
+  border-radius: 3px;
+}
+
+/* =========================================
+   ALPANA DIVIDER
+   ========================================= */
+.alpana-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.alpana-divider::before,
+.alpana-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+}
+
+.alpana-divider-center {
+  color: var(--gold);
+  font-size: 18px;
+}
+
+/* =========================================
+   SECTION STYLES
+   ========================================= */
+.section {
+  padding: 80px 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.section-full {
+  padding: 80px 24px;
+}
+
+/* =========================================
+   BADGE STYLES
+   ========================================= */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.badge-traditional {
+  background: rgba(193, 57, 43, 0.1);
+  color: var(--vermilion);
+  border: 1px solid rgba(193, 57, 43, 0.2);
+}
+
+.badge-contemporary {
+  background: rgba(74, 103, 65, 0.1);
+  color: var(--muted-green);
+  border: 1px solid rgba(74, 103, 65, 0.2);
+}
+
+.badge-artistic {
+  background: rgba(201, 168, 76, 0.15);
+  color: var(--gold);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+}
+
+.badge-heritage {
+  background: rgba(107, 31, 31, 0.1);
+  color: var(--maroon);
+  border: 1px solid rgba(107, 31, 31, 0.2);
+}
+
+/* =========================================
+   BUTTON STYLES
+   ========================================= */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: var(--vermilion);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all var(--transition-mid);
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background: var(--vermilion-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 32px;
+  background: transparent;
+  color: var(--vermilion);
+  border: 1.5px solid var(--vermilion);
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all var(--transition-mid);
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background: var(--vermilion);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.1);
+  color: var(--ivory);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-mid);
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+}
+
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.4);
+}
+
+/* =========================================
+   CARD STYLES
+   ========================================= */
+.card {
+  background: var(--warm-white);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--ivory-dark);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-mid);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+/* =========================================
+   NAVBAR
+   ========================================= */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  transition: all var(--transition-mid);
+}
+
+.navbar.scrolled {
+  background: rgba(250, 247, 242, 0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-sm);
+}
+
+.navbar.transparent {
+  background: transparent;
+}
+
+/* =========================================
+   INTRO SECTION
+   ========================================= */
+.intro-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(42, 36, 32, 0.35) 0%,
+    rgba(42, 36, 32, 0.2) 40%,
+    rgba(42, 36, 32, 0.7) 100%
+  );
+}
+
+/* =========================================
+   PANDAL CARD
+   ========================================= */
+.pandal-card {
+  background: var(--warm-white);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(193, 57, 43, 0.08);
+  box-shadow: var(--shadow-sm);
+  transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.pandal-card:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-6px);
+  border-color: rgba(193, 57, 43, 0.2);
+}
+
+.pandal-card-image {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+}
+
+.pandal-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms ease;
+}
+
+.pandal-card:hover .pandal-card-image img {
+  transform: scale(1.05);
+}
+
+/* =========================================
+   REGION CARD
+   ========================================= */
+.region-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 3/4;
+  box-shadow: var(--shadow-md);
+  transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.region-card:hover {
+  transform: scale(1.02);
+  box-shadow: var(--shadow-xl);
+}
+
+.region-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms ease;
+}
+
+.region-card:hover img {
+  transform: scale(1.08);
+}
+
+.region-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(42, 36, 32, 0.9) 0%,
+    rgba(42, 36, 32, 0.4) 50%,
+    transparent 100%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 28px;
+}
+
+/* =========================================
+   MAP CONTAINER
+   ========================================= */
+.map-container {
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-body) !important;
+}
+
+/* Custom Leaflet marker */
+.custom-puja-marker {
+  background: var(--vermilion);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(193, 57, 43, 0.5);
+}
+
+/* =========================================
+   TRAIL STEP
+   ========================================= */
+.trail-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.trail-step-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.trail-step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--vermilion);
+  border: 2px solid var(--ivory);
+  box-shadow: 0 0 0 3px rgba(193, 57, 43, 0.2);
+}
+
+.trail-step-line {
+  width: 2px;
+  flex: 1;
+  min-height: 40px;
+  background: linear-gradient(to bottom, var(--vermilion), var(--gold));
+  margin: 4px 0;
+}
+
+/* =========================================
+   FILTER CHIP
+   ========================================= */
+.filter-chip {
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1.5px solid var(--ivory-dark);
+  background: var(--warm-white);
+  color: var(--charcoal-light);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.filter-chip:hover {
+  border-color: var(--vermilion);
+  color: var(--vermilion);
+}
+
+.filter-chip.active {
+  background: var(--vermilion);
+  border-color: var(--vermilion);
+  color: #fff;
+}
+
+/* =========================================
+   SEARCH BOX
+   ========================================= */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--warm-white);
+  border: 1.5px solid var(--ivory-dark);
+  border-radius: 8px;
+  padding: 12px 16px;
+  transition: all var(--transition-fast);
+}
+
+.search-box:focus-within {
+  border-color: var(--vermilion);
+  box-shadow: 0 0 0 3px rgba(193, 57, 43, 0.1);
+}
+
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--charcoal);
+}
+
+.search-box input::placeholder {
+  color: var(--charcoal-light);
+}
+
+/* =========================================
+   STAT CARD
+   ========================================= */
+.stat-card {
+  text-align: center;
+  padding: 24px;
+  background: var(--warm-white);
+  border: 1px solid var(--ivory-dark);
+  border-radius: 12px;
+}
+
+/* =========================================
+   CROWD INDICATOR
+   ========================================= */
+.crowd-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--ivory-dark);
+  overflow: hidden;
+}
+
+.crowd-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1s ease;
+}
+
+.crowd-low .crowd-bar-fill { background: var(--muted-green); }
+.crowd-moderate .crowd-bar-fill { background: var(--gold); }
+.crowd-high .crowd-bar-fill { background: var(--vermilion); }
+
+/* =========================================
+   SCROLL ANIMATIONS
+   ========================================= */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(193, 57, 43, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(193, 57, 43, 0); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.7s ease forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-flicker {
+  animation: flicker 2s ease-in-out infinite;
+}
+
+/* Delay utilities */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-800 { animation-delay: 800ms; }
+
+/* =========================================
+   ALPANA PATTERN SVG (for backgrounds)
+   ========================================= */
+.alpana-bg {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='25' fill='none' stroke='%23C9A84C' stroke-width='0.5' stroke-opacity='0.15'/%3E%3Ccircle cx='30' cy='30' r='15' fill='none' stroke='%23C9A84C' stroke-width='0.5' stroke-opacity='0.15'/%3E%3Ccircle cx='30' cy='30' r='5' fill='none' stroke='%23C9A84C' stroke-width='0.5' stroke-opacity='0.15'/%3E%3Cline x1='5' y1='30' x2='55' y2='30' stroke='%23C9A84C' stroke-width='0.5' stroke-opacity='0.1'/%3E%3Cline x1='30' y1='5' x2='30' y2='55' stroke='%23C9A84C' stroke-width='0.5' stroke-opacity='0.1'/%3E%3C/svg%3E");
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (max-width: 768px) {
+  .section {
+    padding: 60px 16px;
+  }
+  
+  .navbar {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 48px 16px;
+  }
+}
+
+/* =========================================
+   SERVER COMPONENT HOVER & RESPONSIVE STYLES
+   (moved here because styled-jsx is client-only)
+   ========================================= */
+
+/* Homepage: Trail card hover */
+.trail-card-hover:hover {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(201, 168, 76, 0.3) !important;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+/* Regions page: pandal link row hover */
+.pandal-link-row:hover {
+  border-color: var(--vermilion) !important;
+  background: rgba(193,57,43,0.04) !important;
+}
+
+/* Regions page: responsive layout */
+@media (max-width: 768px) {
+  .region-row {
+    grid-template-columns: 1fr !important;
+    direction: ltr !important;
+  }
+}
+
+/* Trails page: pandal name hover */
+.trail-pandal-name:hover {
+  color: var(--vermilion) !important;
+}
+
+/* Trails page: responsive layout */
+@media (max-width: 768px) {
+  .trail-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Pandal detail page: responsive grid */
+@media (max-width: 1024px) {
+  .pandal-detail-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+@media (max-width: 768px) {
+  .pandal-detail-grid {
+    padding: 32px 24px !important;
+  }
+}
+
+/* Trail detail: responsive grid */
+@media (max-width: 900px) {
+  .trail-detail-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
