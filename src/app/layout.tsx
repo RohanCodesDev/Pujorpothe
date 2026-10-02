@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import BackToTop from "@/components/BackToTop";
+import GlobalFooter from "@/components/GlobalFooter";
 
 export const metadata: Metadata = {
   title: "পুজোর পথে — Discover the Puja, Follow the Path",
@@ -46,19 +47,7 @@ export default function RootLayout({
         
         <BackToTop />
         
-        <footer style={{
-          textAlign: 'center',
-          padding: '40px 20px',
-          fontFamily: 'var(--font-display)',
-          fontSize: '1.2rem',
-          color: '#fef08a',
-          background: 'transparent',
-          position: 'relative',
-          zIndex: 10,
-          opacity: 0.8
-        }}>
-          Made with love by Rohan
-        </footer>
+        <GlobalFooter />
       </body>
     </html>
   );

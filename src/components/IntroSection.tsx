@@ -4,6 +4,20 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function IntroSection() {
+  // ============================================================================
+  // 🎨 LAYOUT POSITIONING CONFIGURATION 🎨
+  // Modify these values to easily tweak the spacing and positioning of the elements
+  // ============================================================================
+  const LAYOUT = {
+    topLogoOffset: '6vh',             // Distance of the main Eye Logo from the top of the screen
+    logoSize: '120px',                // Size (width) of the Maa Durga eye logo at the top
+    centerContentGap: '0.2rem',       // Default gap between items in the vertically centered block
+    taglineBottomMargin: '-9rem',     // Margin to pull the "Your GuideBook..." tagline closer to the Hero Text
+    wishTextTopMargin: '-85px',       // Margin to pull the Wish Text closer to the Hero Text
+    wishToShubhoGap: '1.25rem',       // Gap between the English wish text and "Shubho Sharodiya"
+  };
+  // ============================================================================
+
   const router = useRouter();
 
   return (
@@ -82,38 +96,88 @@ export default function IntroSection() {
         </div>
       </div>
 
-      {/* Hero Content Wrapper */}
+      {/* Top Content Wrapper (Logo) */}
       <div
-        className="intro-content-wrapper"
+        className="intro-top-wrapper"
         style={{
           position: 'absolute',
-          top: '12vh',
+          top: LAYOUT.topLogoOffset,
           left: 0,
           right: 0,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '0px',
+          gap: '1rem',
           zIndex: 10
         }}
       >
-        {/* Hero Text Logo */}
+        {/* 1. Main Logo Image */}
+        <div style={{ animation: 'fadeInUp 1.2s ease 0.1s both' }}>
+          <Image
+            src="/pujorpothelogo.svg"
+            alt="Pujor Pothe Logo"
+            width={100} // Base intrinsic width; style width overrides this
+            height={100}
+            style={{
+              width: LAYOUT.logoSize,
+              height: 'auto',
+              filter: 'drop-shadow(0 2px 10px rgba(250, 204, 21, 0.4))'
+            }}
+            priority
+          />
+        </div>
+
+      </div>
+
+      {/* Center Content Wrapper (Tagline, Hero Text, & Wishes) */}
+      <div
+        className="intro-center-wrapper"
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: 0,
+          right: 0,
+          transform: 'translateY(-50%)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: LAYOUT.centerContentGap,
+          zIndex: 10
+        }}
+      >
+        {/* 2. Tagline */}
+        <div style={{
+          fontFamily: 'var(--font-body)',
+          color: '#fef08a',
+          fontSize: '1.25rem',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          animation: 'fadeInUp 1.2s ease 0.2s both',
+          textShadow: '0 2px 10px rgba(254, 240, 138, 0.3)',
+          textAlign: 'center',
+          padding: '0 24px',
+          marginBottom: LAYOUT.taglineBottomMargin // Pulls it closer to the hero text image
+        }}>
+          Your GuideBook for Durga Puja&apos;26
+        </div>
+
+        {/* 3. Hero Text Image (Bengali Typography) */}
         <div
           className="intro-logo"
           style={{
             width: '100%',
-            maxWidth: '750px',
+            maxWidth: '650px',
             padding: '0 24px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            animation: 'fadeInUp 1.2s ease 0.2s both',
+            animation: 'fadeInUp 1.2s ease 0.3s both',
           }}>
           <Image
             src="/pujorpothe.svg"
             alt="পুজোর পথে"
-            width={750}
-            height={225}
+            width={650}
+            height={200}
             style={{
               width: '100%',
               height: 'auto',
@@ -123,7 +187,7 @@ export default function IntroSection() {
           />
         </div>
 
-        {/* Wish Text & Credit */}
+        {/* 4. Wish Text & Credit */}
         <div
           className="intro-wish"
           style={{
@@ -132,8 +196,8 @@ export default function IntroSection() {
             flexDirection: 'column',
             alignItems: 'center',
             padding: '0 24px',
-            marginTop: '-90px', /* Increase this negative value (e.g. -120px) to pull it even closer up */
             position: 'relative',
+            marginTop: LAYOUT.wishTextTopMargin, // Pulls wishes closer to the hero text image
             zIndex: 15,
             animation: 'fadeInUp 1.2s ease 0.4s both',
           }}>
@@ -141,7 +205,7 @@ export default function IntroSection() {
             <p style={{
               fontFamily: 'var(--font-body)',
               color: 'rgba(254, 240, 138, 0.9)', // Light yellow color
-              fontSize: '1.05rem',
+              fontSize: '1.15rem',
               maxWidth: '600px',
               margin: '0 auto',
               lineHeight: 1.6,
@@ -160,7 +224,7 @@ export default function IntroSection() {
               letterSpacing: '0.04em',
               textShadow: '0 2px 8px rgba(0, 0, 0, 0.8)',
               fontStyle: 'italic',
-              marginTop: '0.75rem',
+              marginTop: LAYOUT.wishToShubhoGap,
               textAlign: 'center'
             }}>
               Shubho Sharodiya.
@@ -174,24 +238,7 @@ export default function IntroSection() {
         </div>
       </div>
 
-      {/* Credit Footer */}
-      <div style={{
-        position: 'absolute',
-        bottom: '20px',
-        width: '100%',
-        textAlign: 'center',
-        zIndex: 10,
-        animation: 'fadeInUp 1s ease 0.6s both',
-      }}>
-        <p style={{
-          fontFamily: 'var(--font-body)',
-          color: '#fef08a', // Light yellow color
-          fontSize: '0.85rem',
-          letterSpacing: '0.05em',
-        }}>
-          Made with love by RohanCodesDev
-        </p>
-      </div>
+
 
       {/* Flower Illustration */}
       <div
@@ -212,6 +259,22 @@ export default function IntroSection() {
           fill
           style={{ objectFit: 'contain', objectPosition: 'bottom left' }}
         />
+      </div>
+
+      {/* Absolutely positioned footer for the landing page */}
+      <div style={{
+        position: 'absolute',
+        bottom: '24px',
+        width: '100%',
+        textAlign: 'center',
+        fontFamily: 'var(--font-display)',
+        fontSize: '1.2rem',
+        color: '#fef08a',
+        opacity: 0.8,
+        zIndex: 10,
+        pointerEvents: 'none'
+      }}>
+        Made with love by RohanCodesDev
       </div>
 
       <style jsx>{`

@@ -2484,7 +2484,7 @@ export const imageMap: Record<string, string> = {
   'salt_lake': '/images/salt_lake_region_1790874769865.jpg',
   'new_town': '/images/new_town_region_1790874850216.jpg',
   'hero': '/images/puja_hero_bg_1790874706385.jpg',
-  'logo': '/images/pujorpothe_logo_1790874648371.jpg',
+  'logo': '/pujorpothelogo.svg',
   'shiuli': '/images/shiuli_flowers_1790874869796.jpg',
 };
 
