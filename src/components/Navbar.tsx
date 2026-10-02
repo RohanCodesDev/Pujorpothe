@@ -99,7 +99,7 @@ export default function Navbar() {
         <button className="nav-mobile-close" onClick={() => setMenuOpen(false)} aria-label="Close menu">✕</button>
 
         {NAV_LINKS.map(item => (
-          <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
+          <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className="sidebar-link">
             {item.label}
           </Link>
         ))}

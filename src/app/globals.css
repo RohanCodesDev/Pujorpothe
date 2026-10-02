@@ -642,29 +642,39 @@ html { font-size: clamp(13px, 1.8vw, 16px); }
   .nav-hamburger { display: flex !important; }
 }
 
-/* Full-screen mobile nav overlay */
+/* Right-aligned sliding mobile sidebar */
 .nav-mobile-menu {
-  display: none;
   position: fixed;
-  inset: 0;
-  background: rgba(6, 0, 1, 0.97);
-  backdrop-filter: blur(20px);
+  top: 0; right: -100%; bottom: 0;
+  width: 75vw; max-width: 300px;
+  background: rgba(10, 0, 0, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   z-index: 200;
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2.5rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 100px 32px 40px;
+  gap: 0;
+  transition: right 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  border-left: 1px solid rgba(255,255,255,0.08);
 }
-.nav-mobile-menu.open { display: flex; }
-.nav-mobile-menu a {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 8vw, 3.5rem);
+.nav-mobile-menu.open { right: 0; }
+.nav-mobile-menu a.sidebar-link {
+  font-family: var(--font-body);
+  font-size: 1.35rem;
   color: #fff;
   text-decoration: none;
-  transition: color 0.2s;
-  padding: 8px 0;
+  transition: all 0.3s ease;
+  padding: 24px 0;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-.nav-mobile-menu a:hover { color: var(--gold); }
+.nav-mobile-menu a.sidebar-link:hover { 
+  color: var(--gold); 
+  padding-left: 8px; 
+}
 .nav-mobile-close {
   position: absolute;
   top: 24px; right: 24px;
@@ -709,8 +719,14 @@ html { font-size: clamp(13px, 1.8vw, 16px); }
 /* ── Drawyer ── */
 @media (max-width: 768px) {
   .drawyer-search-row { flex-direction: column !important; gap: 0.75rem !important; }
+  .drawyer-search-row .glass-input { 
+    flex: none !important; 
+    width: 100% !important; 
+    padding: 12px 18px !important; 
+    border-radius: 12px !important;
+    font-size: 0.95rem !important;
+  }
   .pandal-name { font-size: 1.15rem !important; }
-  .pandal-desc { -webkit-line-clamp: 1 !important; }
   .pandal-avatar { width: 46px !important; height: 46px !important; }
 }
 @media (max-width: 480px) {
@@ -730,7 +746,8 @@ html { font-size: clamp(13px, 1.8vw, 16px); }
 /* ── Metro ── */
 @media (max-width: 768px) {
   .metro-header h1 { font-size: clamp(2.2rem, 9vw, 3.5rem) !important; min-width: unset !important; }
-  .metro-prev-name, .metro-next-name { display: none !important; }
+  .metro-prev-name { left: -15px !important; font-size: 0.85rem !important; opacity: 0.1 !important; }
+  .metro-next-name { right: -15px !important; font-size: 0.85rem !important; opacity: 0.1 !important; }
   .metro-station-name { font-size: clamp(1.3rem, 5vw, 2rem) !important; }
   .metro-gap { gap: 16px !important; }
 }

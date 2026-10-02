@@ -69,10 +69,49 @@ function getPandalImage(id: string): string {
   return PANDAL_IMAGES[id] ?? w('2014_Durga_Puja_Bagbazar_Pandal,_Kolkata.jpg');
 }
 
+function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371; // Radius of the earth in km
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; // Distance in km
+}
+
 export default function DrawyerPage() {
   const [search, setSearch] = useState('');
   const [region, setRegion] = useState('');
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
+  
+  const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
+  const [isLocating, setIsLocating] = useState(false);
+  const [locationError, setLocationError] = useState('');
+
+  const toggleLocation = () => {
+    if (userLocation) {
+      setUserLocation(null);
+      return;
+    }
+    if (!navigator.geolocation) {
+      setLocationError('Location not supported');
+      return;
+    }
+    setIsLocating(true);
+    setLocationError('');
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setIsLocating(false);
+      },
+      (err) => {
+        setLocationError('Access denied');
+        setIsLocating(false);
+      }
+    );
+  };
 
   const filteredPandals = useMemo(() => {
     let result = pandals;
@@ -83,8 +122,17 @@ export default function DrawyerPage() {
     if (region) {
       result = result.filter(p => p.region === region);
     }
+    
+    if (userLocation) {
+      result = [...result].sort((a, b) => {
+        const distA = getDistanceFromLatLonInKm(userLocation.lat, userLocation.lng, a.lat, a.lng);
+        const distB = getDistanceFromLatLonInKm(userLocation.lat, userLocation.lng, b.lat, b.lng);
+        return distA - distB;
+      });
+    }
+    
     return result;
-  }, [search, region]);
+  }, [search, region, userLocation]);
 
   const displayedPandals = filteredPandals.slice(0, 20); // Show top 20 matches
 
@@ -165,6 +213,40 @@ export default function DrawyerPage() {
           </select>
         </div>
 
+        {/* Location Toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '3rem', marginTop: '-2rem' }}>
+          <button 
+            onClick={toggleLocation}
+            className="location-toggle-btn"
+            style={{
+              background: userLocation ? 'rgba(254, 240, 138, 0.15)' : 'transparent',
+              border: `1px solid ${userLocation ? '#fef08a' : 'rgba(255,255,255,0.2)'}`,
+              color: userLocation ? '#fef08a' : 'rgba(255,255,255,0.6)',
+              padding: '6px 16px',
+              borderRadius: '20px',
+              fontSize: '0.85rem',
+              fontFamily: 'var(--font-body)',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            {isLocating ? 'Locating...' : userLocation ? 'Location On' : 'Use Location'}
+          </button>
+          {!userLocation && !isLocating && !locationError && (
+            <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-body)', fontStyle: 'italic' }}>
+              Turn on to see distance and sort by proximity
+            </span>
+          )}
+          {locationError && <span style={{ color: '#ef4444', fontSize: '0.8rem', fontFamily: 'var(--font-body)' }}>{locationError}</span>}
+        </div>
+
         {/* Top Pandals List */}
         <div style={{ width: '100%' }}>
           <h2 style={{
@@ -172,7 +254,7 @@ export default function DrawyerPage() {
             fontSize: '2.5rem',
             color: '#fef08a',
             marginBottom: '2rem',
-            textAlign: 'left',
+            textAlign: 'center',
             textShadow: '0 2px 8px rgba(0,0,0,0.5)'
           }}>
             Top Pandals to Visit
@@ -225,6 +307,11 @@ export default function DrawyerPage() {
                       </h3>
                       <div className="pandal-bengali">
                         {pandal.bengaliName}
+                        {userLocation && (
+                          <span style={{ fontSize: '0.85rem', color: '#a3e635', marginLeft: '12px', fontFamily: 'var(--font-body)' }}>
+                            {getDistanceFromLatLonInKm(userLocation.lat, userLocation.lng, pandal.lat, pandal.lng).toFixed(1)} km away
+                          </span>
+                        )}
                       </div>
                       <div className="pandal-region">
                         {pandal.region.replace(/-/g, ' ')}
@@ -390,10 +477,6 @@ export default function DrawyerPage() {
           font-size: 0.82rem;
           color: rgba(255, 255, 255, 0.38);
           line-height: 1.45;
-          overflow: hidden;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
         }
       `}</style>
     </main>
