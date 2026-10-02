@@ -616,79 +616,201 @@ h1, h2, h3, h4 {
 }
 
 /* =========================================
-   RESPONSIVE
+   RESPONSIVE — MOBILE FIRST
+   Breakpoints:
+     xs  < 480px   (small phones)
+     sm  < 640px   (large phones)
+     md  < 768px   (tablets portrait)
+     lg  < 1024px  (tablets landscape)
    ========================================= */
+
+/* ── Fluid font scale ── */
+html { font-size: clamp(13px, 1.8vw, 16px); }
+
+/* ── Section padding ── */
+.section { padding: 80px 24px; }
+@media (max-width: 768px) { .section { padding: 48px 16px; } }
+@media (max-width: 480px) { .section { padding: 36px 14px; } }
+
+/* ── Navbar ── */
+.navbar { padding: 0 32px; }
+@media (max-width: 768px) { .navbar { padding: 0 16px; } }
+
+/* Desktop nav links — hidden on mobile */
+@media (max-width: 700px) {
+  .nav-desktop { display: none !important; }
+  .nav-hamburger { display: flex !important; }
+}
+
+/* Full-screen mobile nav overlay */
+.nav-mobile-menu {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 0, 1, 0.97);
+  backdrop-filter: blur(20px);
+  z-index: 200;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+}
+.nav-mobile-menu.open { display: flex; }
+.nav-mobile-menu a {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.2s;
+  padding: 8px 0;
+}
+.nav-mobile-menu a:hover { color: var(--gold); }
+.nav-mobile-close {
+  position: absolute;
+  top: 24px; right: 24px;
+  background: none; border: none;
+  color: rgba(255,255,255,0.6);
+  font-size: 2rem; cursor: pointer;
+  line-height: 1;
+}
+
+/* ── Intro / Hero ── */
 @media (max-width: 768px) {
-  .section {
-    padding: 60px 16px;
+  .intro-logo { max-width: 88vw !important; }
+  .intro-wish { padding: 0 18px !important; }
+  .intro-wish p:first-child { font-size: 0.88rem !important; }
+  .intro-mandala { 
+    top: auto !important;
+    bottom: 0 !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translate(-50%, 50%) !important; 
+    width: 320px !important; 
+    height: 320px !important; 
   }
-  
-  .navbar {
-    padding: 0 16px;
+  .intro-flower { 
+    width: 310px !important; 
+    height: 310px !important; 
+    top: -120px !important;
+    left: -120px !important;
+    bottom: auto !important; 
+    transform: rotate(135deg) !important; 
+  }
+  .intro-flower img {
+    object-position: center !important;
   }
 }
-
 @media (max-width: 480px) {
-  .section {
-    padding: 48px 16px;
+  .intro-logo { max-width: 96vw !important; }
+  .intro-wish { padding: 0 14px !important; }
+  .intro-wish p:first-child { font-size: 0.8rem !important; line-height: 1.5 !important; }
+}
+
+/* ── Drawyer ── */
+@media (max-width: 768px) {
+  .drawyer-search-row { flex-direction: column !important; gap: 0.75rem !important; }
+  .pandal-name { font-size: 1.15rem !important; }
+  .pandal-desc { -webkit-line-clamp: 1 !important; }
+  .pandal-avatar { width: 46px !important; height: 46px !important; }
+}
+@media (max-width: 480px) {
+  .pandal-name { font-size: 1rem !important; }
+  .pandal-avatar { width: 40px !important; height: 40px !important; }
+  .pandal-region { display: none !important; }
+}
+
+/* ── Explore ── */
+@media (max-width: 768px) {
+  .explore-controls { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+  .explore-pandal-row { flex-direction: column !important; gap: 8px !important; }
+  .explore-pandal-name { font-size: clamp(1.5rem, 6vw, 2rem) !important; }
+  .explore-num { display: none !important; }
+}
+
+/* ── Metro ── */
+@media (max-width: 768px) {
+  .metro-header h1 { font-size: clamp(2.2rem, 9vw, 3.5rem) !important; min-width: unset !important; }
+  .metro-prev-name, .metro-next-name { display: none !important; }
+  .metro-station-name { font-size: clamp(1.3rem, 5vw, 2rem) !important; }
+  .metro-gap { gap: 16px !important; }
+}
+@media (max-width: 480px) {
+  .metro-header h1 { font-size: 2rem !important; }
+  .metro-modal-inner { padding: 24px 16px !important; border-radius: 20px !important; }
+}
+
+/* ── Pandal detail ── */
+@media (max-width: 1024px) { .pandal-detail-grid { grid-template-columns: 1fr !important; } }
+@media (max-width: 768px) { .pandal-detail-grid { padding: 28px 18px !important; } }
+@media (max-width: 480px) { .pandal-detail-grid { padding: 20px 14px !important; } }
+
+/* ── Region page ── */
+@media (max-width: 768px) {
+  .region-row { grid-template-columns: 1fr !important; direction: ltr !important; }
+  .region-hero-title { font-size: clamp(2rem, 8vw, 3rem) !important; }
+}
+
+/* ── Trail pages ── */
+@media (max-width: 768px) { .trail-row { grid-template-columns: 1fr !important; } }
+@media (max-width: 900px) { .trail-detail-grid { grid-template-columns: 1fr !important; } }
+
+/* ── About page ── */
+@media (max-width: 768px) { .about-grid { grid-template-columns: 1fr !important; } }
+
+/* ── Modal → bottom sheet on small screens ── */
+@media (max-width: 600px) {
+  .modal-center {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+  .modal-center > div {
+    border-radius: 24px 24px 0 0 !important;
+    border-bottom: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
   }
 }
 
-/* =========================================
-   SERVER COMPONENT HOVER & RESPONSIVE STYLES
-   (moved here because styled-jsx is client-only)
-   ========================================= */
+/* ── Reusable card grids ── */
+.card-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+@media (max-width: 900px) { .card-grid-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .card-grid-3 { grid-template-columns: 1fr; } }
 
-/* Homepage: Trail card hover */
+.card-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+@media (max-width: 640px) { .card-grid-2 { grid-template-columns: 1fr; } }
+
+/* ── Minimum touch targets ── */
+@media (max-width: 768px) {
+  button, [role="button"] { min-height: 44px; }
+  .pandal-row { padding-top: 14px !important; padding-bottom: 14px !important; }
+}
+
+/* ── Pandal card image ── */
+@media (max-width: 480px) { .pandal-card-image { height: 180px !important; } }
+
+/* ── Utility classes ── */
+.hide-mobile { display: block; }
+@media (max-width: 640px) { .hide-mobile { display: none !important; } }
+@media (max-width: 640px) { .full-mobile { width: 100% !important; } }
+
+/* ── Server component hover styles (no styled-jsx) ── */
 .trail-card-hover:hover {
   background: rgba(255,255,255,0.08) !important;
   border-color: rgba(201, 168, 76, 0.3) !important;
   transform: translateY(-4px);
   box-shadow: 0 12px 40px rgba(0,0,0,0.3);
 }
-
-/* Regions page: pandal link row hover */
 .pandal-link-row:hover {
   border-color: var(--vermilion) !important;
   background: rgba(193,57,43,0.04) !important;
 }
+.trail-pandal-name:hover { color: var(--vermilion) !important; }
 
-/* Regions page: responsive layout */
-@media (max-width: 768px) {
-  .region-row {
-    grid-template-columns: 1fr !important;
-    direction: ltr !important;
+/* ── Drawyer glass inputs on mobile ── */
+@media (max-width: 640px) {
+  .glass-input {
+    font-size: 0.95rem !important;
+    padding: 12px 18px !important;
+    border-radius: 14px !important;
   }
 }
-
-/* Trails page: pandal name hover */
-.trail-pandal-name:hover {
-  color: var(--vermilion) !important;
-}
-
-/* Trails page: responsive layout */
-@media (max-width: 768px) {
-  .trail-row {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-/* Pandal detail page: responsive grid */
-@media (max-width: 1024px) {
-  .pandal-detail-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-@media (max-width: 768px) {
-  .pandal-detail-grid {
-    padding: 32px 24px !important;
-  }
-}
-
-/* Trail detail: responsive grid */
-@media (max-width: 900px) {
-  .trail-detail-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-

@@ -174,6 +174,7 @@ export default function MetroGuidePage() {
         
         {/* Interactive Carousel Header */}
         <div 
+          className="metro-header"
           style={{ marginBottom: '60px', textAlign: 'center', userSelect: 'none', touchAction: 'pan-y' }}
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
@@ -192,6 +193,7 @@ export default function MetroGuidePage() {
             
             {/* Left Faded Name */}
             <div 
+              className="metro-prev-name"
               key={`prev-${current.id}`}
               style={{
                 position: 'absolute',
@@ -252,6 +254,7 @@ export default function MetroGuidePage() {
 
             {/* Right Faded Name */}
             <div 
+              className="metro-next-name"
               key={`next-${current.id}`}
               style={{
                 position: 'absolute',
@@ -291,7 +294,7 @@ export default function MetroGuidePage() {
         </div>
 
         {/* Timeline */}
-        <div key={`timeline-${current.id}`} style={{ display: 'flex', flexDirection: 'column', gap: '24px', animation: 'fade-slide-up 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards' }}>
+        <div key={`timeline-${current.id}`} className="metro-gap" style={{ display: 'flex', flexDirection: 'column', gap: '24px', animation: 'fade-slide-up 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards' }}>
           {current.stops.map((station, index) => (
             <div key={station.stop} style={{ display: 'flex', gap: '32px' }}>
               
@@ -323,7 +326,7 @@ export default function MetroGuidePage() {
 
               {/* Station Content */}
               <div style={{ flex: 1, paddingBottom: '32px' }}>
-                <h3 style={{
+                <h3 className="metro-station-name" style={{
                   fontFamily: 'var(--font-display)',
                   fontSize: '2.5rem',
                   color: '#fff',
@@ -384,7 +387,7 @@ export default function MetroGuidePage() {
 
       {/* Pandal Modal */}
       {selectedPandal && (
-        <div style={{
+        <div className="modal-center" style={{
           position: 'fixed',
           top: 0, left: 0, right: 0, bottom: 0,
           background: 'rgba(0,0,0,0.85)',
@@ -398,7 +401,7 @@ export default function MetroGuidePage() {
         }}
         onClick={() => setSelectedPandal(null)}
         >
-          <div style={{
+          <div className="metro-modal-inner" style={{
             background: '#0a0a0a',
             border: `1px solid ${current.color}`,
             borderRadius: '24px',

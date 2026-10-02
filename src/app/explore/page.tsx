@@ -20,12 +20,12 @@ export default function ExplorePage() {
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState<'region' | 'metro'>('region');
   const [selectedFilterValue, setSelectedFilterValue] = useState('all');
-  
+
   const [useLocation, setUseLocation] = useState(false);
   const [userLat, setUserLat] = useState<number | null>(null);
   const [userLng, setUserLng] = useState<number | null>(null);
   const [locationLoading, setLocationLoading] = useState(false);
-  
+
   const [visibleCount, setVisibleCount] = useState(5);
   const [showMap, setShowMap] = useState(false);
 
@@ -33,7 +33,7 @@ export default function ExplorePage() {
 
   const metroMapping: Record<string, string[]> = useMemo(() => {
     const toId = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    
+
     return {
       'Blue Line': blueLineStops.flatMap(s => s.pandals.map(toId)),
       'Green Line': greenLineStops.flatMap(s => s.pandals.map(toId)),
@@ -99,12 +99,12 @@ export default function ExplorePage() {
       paddingBottom: '6rem',
     }}>
       <div style={{ maxWidth: '900px', width: '100%', margin: '0 auto', padding: '0 24px', zIndex: 10 }}>
-        
+
         {/* Header & Immersive Search */}
         <div style={{ marginBottom: '60px' }}>
-          <input 
-            type="text" 
-            placeholder="Search pandals..." 
+          <input
+            type="text"
+            placeholder="Search pandals..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             style={{
@@ -120,22 +120,22 @@ export default function ExplorePage() {
               lineHeight: 1
             }}
           />
-          
+
           {/* Controls (Filters & Actions) - purely text based, no borders */}
-          <div style={{ 
-            display: 'flex', 
-            gap: '32px', 
-            alignItems: 'center', 
+          <div style={{
+            display: 'flex',
+            gap: '32px',
+            alignItems: 'center',
             flexWrap: 'wrap',
             fontFamily: 'var(--font-body)',
             fontSize: '1rem',
             color: 'rgba(255,255,255,0.6)'
           }}>
-            
+
             {/* Filter Dropdowns styled as inline text */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span>Show</span>
-              <select 
+              <select
                 value={filterType}
                 onChange={(e) => {
                   setFilterType(e.target.value as 'region' | 'metro');
@@ -153,9 +153,9 @@ export default function ExplorePage() {
                 <option value="region" style={{ background: '#111' }}>regions</option>
                 <option value="metro" style={{ background: '#111' }}>metro lines</option>
               </select>
-              
+
               <span>:</span>
-              <select 
+              <select
                 value={selectedFilterValue}
                 onChange={(e) => setSelectedFilterValue(e.target.value)}
                 style={{
@@ -168,7 +168,7 @@ export default function ExplorePage() {
                 }}
               >
                 <option value="all" style={{ background: '#111' }}>All</option>
-                {filterType === 'region' 
+                {filterType === 'region'
                   ? regions.map(r => <option key={r.id} value={r.id} style={{ background: '#111' }}>{r.name}</option>)
                   : metroLines.map(m => <option key={m} value={m} style={{ background: '#111' }}>{m}</option>)
                 }
@@ -177,7 +177,7 @@ export default function ExplorePage() {
 
             {/* Action Links */}
             <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-              <span 
+              <span
                 onClick={handleLocate}
                 style={{
                   color: useLocation ? '#fef08a' : 'inherit',
@@ -185,14 +185,14 @@ export default function ExplorePage() {
                   transition: 'color 0.2s',
                   display: 'flex', alignItems: 'center', gap: '6px'
                 }}
-                onMouseOver={(e) => { if(!useLocation) e.currentTarget.style.color = '#fff'; }}
-                onMouseOut={(e) => { if(!useLocation) e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; }}
+                onMouseOver={(e) => { if (!useLocation) e.currentTarget.style.color = '#fff'; }}
+                onMouseOut={(e) => { if (!useLocation) e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; }}
               >
                 <span style={{ fontSize: '1.2rem' }}>⌖</span>
                 {locationLoading ? 'Locating...' : useLocation ? 'Sorted by Nearby' : 'Near Me'}
               </span>
 
-              <span 
+              <span
                 onClick={() => setShowMap(!showMap)}
                 style={{
                   cursor: 'pointer',
@@ -206,14 +206,14 @@ export default function ExplorePage() {
                 {showMap ? 'Hide Map' : 'Map View'}
               </span>
             </div>
-            
+
           </div>
         </div>
 
         {/* Map View */}
         {showMap && (
           <div style={{ height: '400px', marginBottom: '60px', borderRadius: '8px', overflow: 'hidden' }}>
-             <MapView
+            <MapView
               pandals={processedPandals}
               center={userLat && userLng ? [userLat, userLng] : [22.5726, 88.3639]}
               zoom={13}
@@ -225,65 +225,65 @@ export default function ExplorePage() {
         {/* List View */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '60px' }}>
           {displayedPandals.map((pandal, i) => (
-              <div key={pandal.id} style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '32px'
+            <div key={pandal.id} style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '32px'
+            }}>
+              <div style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '1.2rem',
+                color: 'rgba(255,255,255,0.2)',
+                paddingTop: '8px',
+                userSelect: 'none'
               }}>
-                <div style={{ 
-                  fontFamily: 'var(--font-display)', 
-                  fontSize: '1.2rem', 
-                  color: 'rgba(255,255,255,0.2)', 
-                  paddingTop: '8px',
-                  userSelect: 'none' 
-                }}>
-                  {(i + 1).toString().padStart(2, '0')}
-                </div>
-                
-                <div style={{ flex: 1 }}>
-                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', color: '#fff', marginBottom: '4px', lineHeight: 1.1 }}>
-                    {pandal.name} 
-                    <span style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.4)', marginLeft: '12px', fontWeight: 'normal' }}>{pandal.bengaliName}</span>
-                  </h3>
-                  
-                  <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '16px' }}>
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: '#fef08a', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-                      {pandal.region.replace('-', ' ')}
-                    </span>
-                    {pandal.distanceKm !== undefined && (
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'rgba(255,255,255,0.4)' }}>
-                        • {pandal.distanceKm.toFixed(1)} km away
-                      </span>
-                    )}
-                  </div>
-
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', color: 'rgba(255,255,255,0.6)', maxWidth: '650px', marginBottom: '24px', lineHeight: 1.6 }}>
-                    {pandal.description}
-                  </p>
-                  
-                  <a 
-                    href={`https://www.google.com/maps/dir/?api=1&destination=${pandal.lat},${pandal.lng}`} 
-                    target="_blank" 
-                    rel="noreferrer"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '0.95rem',
-                      color: '#fff',
-                      textDecoration: 'none',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      transition: 'opacity 0.2s',
-                      opacity: 0.8
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
-                    onMouseOut={(e) => e.currentTarget.style.opacity = '0.8'}
-                  >
-                    Directions ↗
-                  </a>
-                </div>
+                {(i + 1).toString().padStart(2, '0')}
               </div>
-            ))}
+
+              <div style={{ flex: 1 }}>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', color: '#fff', marginBottom: '4px', lineHeight: 1.1 }}>
+                  {pandal.name}
+                  <span style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.4)', marginLeft: '12px', fontWeight: 'normal' }}>{pandal.bengaliName}</span>
+                </h3>
+
+                <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '16px' }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: '#fef08a', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                    {pandal.region.replace('-', ' ')}
+                  </span>
+                  {pandal.distanceKm !== undefined && (
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'rgba(255,255,255,0.4)' }}>
+                      • {pandal.distanceKm.toFixed(1)} km away
+                    </span>
+                  )}
+                </div>
+
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', color: 'rgba(255,255,255,0.6)', maxWidth: '650px', marginBottom: '24px', lineHeight: 1.6 }}>
+                  {pandal.description}
+                </p>
+
+                <a
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${pandal.lat},${pandal.lng}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '0.95rem',
+                    color: '#fff',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    transition: 'opacity 0.2s',
+                    opacity: 0.8
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
+                  onMouseOut={(e) => e.currentTarget.style.opacity = '0.8'}
+                >
+                  Directions ↗
+                </a>
+              </div>
+            </div>
+          ))}
 
           {displayedPandals.length === 0 && (
             <div style={{ padding: '60px 0', textAlign: 'center', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-body)', fontSize: '1.2rem' }}>
