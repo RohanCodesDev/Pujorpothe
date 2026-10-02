@@ -29,6 +29,7 @@ export default function ExplorePage() {
   const [visibleCount, setVisibleCount] = useState(5);
   const [showMap, setShowMap] = useState(false);
   const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
+  const [selectedMapPandal, setSelectedMapPandal] = useState<Pandal | null>(null);
 
   const metroLines = ['Blue Line', 'Green Line', 'Orange Line', 'Purple Line'];
 
@@ -45,12 +46,20 @@ export default function ExplorePage() {
 
   const handleLocate = () => {
     if (!navigator.geolocation) return;
+
+    if (useLocation) {
+      setUseLocation(false);
+      return;
+    }
+
     setLocationLoading(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setUserLat(pos.coords.latitude);
         setUserLng(pos.coords.longitude);
         setUseLocation(true);
+        setSelectedFilterValue('all'); // Force clear filters to show global closest
+        setSearch(''); // Clear search
         setLocationLoading(false);
         // Reset visibility to top 5 when location changes
         setVisibleCount(5);
@@ -58,7 +67,8 @@ export default function ExplorePage() {
       () => {
         alert('Location access denied or unavailable.');
         setLocationLoading(false);
-      }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
 
@@ -214,13 +224,80 @@ export default function ExplorePage() {
 
         {/* Map View */}
         {showMap && (
-          <div style={{ height: '400px', marginBottom: '60px', borderRadius: '8px', overflow: 'hidden' }}>
+          <div style={{ position: 'relative', height: '400px', marginBottom: '60px', borderRadius: '8px', overflow: 'hidden' }}>
             <MapView
               pandals={processedPandals}
               center={mapCenter || (userLat && userLng ? [userLat, userLng] : [22.5726, 88.3639])}
               zoom={mapCenter ? 15 : 13}
               height="100%"
+              onPandalClick={(p) => setSelectedMapPandal(p)}
             />
+
+            {/* Premium Map Modal Overlay */}
+            {selectedMapPandal && (
+              <div style={{
+                position: 'absolute',
+                top: 0, left: 0, right: 0, bottom: 0,
+                background: 'rgba(26, 8, 4, 0.6)',
+                backdropFilter: 'blur(4px)',
+                zIndex: 1000,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '20px',
+                animation: 'fadeIn 0.2s ease-out'
+              }}>
+                <div style={{
+                  background: '#2C1210',
+                  border: '1px solid rgba(254, 240, 138, 0.2)',
+                  borderRadius: '16px',
+                  padding: '24px',
+                  width: '100%',
+                  maxWidth: '340px',
+                  boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
+                  position: 'relative'
+                }}>
+                  <button 
+                    onClick={() => setSelectedMapPandal(null)}
+                    style={{
+                      position: 'absolute', top: '12px', right: '12px',
+                      background: 'rgba(255,255,255,0.1)',
+                      border: 'none', color: '#fff',
+                      width: '28px', height: '28px', borderRadius: '50%',
+                      cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    }}
+                  >
+                    ✕
+                  </button>
+                  <h3 style={{ fontFamily: 'var(--font-display)', color: '#fef08a', fontSize: '1.4rem', marginBottom: '4px', paddingRight: '20px' }}>
+                    {selectedMapPandal.name}
+                  </h3>
+                  <p style={{ fontFamily: 'var(--font-bengali)', color: '#fbbf24', fontSize: '1.1rem', marginBottom: '12px' }}>
+                    {selectedMapPandal.bengaliName}
+                  </p>
+                  <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '16px' }}>
+                    {selectedMapPandal.description.length > 100 ? selectedMapPandal.description.substring(0, 100) + '...' : selectedMapPandal.description}
+                  </p>
+                  
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    {selectedMapPandal.distanceKm !== undefined ? (
+                      <span style={{ background: 'rgba(254, 240, 138, 0.1)', color: '#fef08a', padding: '4px 10px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600 }}>
+                        {selectedMapPandal.distanceKm.toFixed(1)} km away
+                      </span>
+                    ) : <span></span>}
+                    <a 
+                      href={`https://www.google.com/maps/dir/?api=1&destination=${selectedMapPandal.lat},${selectedMapPandal.lng}`}
+                      target="_blank" rel="noreferrer"
+                      style={{
+                        background: '#D90429', color: '#fff', padding: '8px 16px', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 600, textDecoration: 'none'
+                      }}
+                    >
+                      Directions ↗
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 

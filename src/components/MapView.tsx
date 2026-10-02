@@ -108,43 +108,7 @@ export default function MapView({
       });
 
       const marker = L.marker([pandal.lat, pandal.lng], { icon })
-        .addTo(map)
-        .bindPopup(`
-          <div style="font-family: 'Inter', sans-serif; min-width: 200px;">
-            <div style="font-weight: 600; font-size: 14px; color: #2A2420; margin-bottom: 4px;">
-              ${pandal.name}
-            </div>
-            <div style="font-family: 'Hind Siliguri', sans-serif; font-size: 13px; color: #8B1A1A; margin-bottom: 8px;">
-              ${pandal.bengaliName}
-            </div>
-            <div style="font-size: 12px; color: #5C5047; margin-bottom: 10px; line-height: 1.5;">
-              ${pandal.description.slice(0, 80)}...
-            </div>
-            <div style="display: flex; gap: 8px; align-items: center; justify-content: space-between;">
-              ${pandal.distanceKm !== undefined ? `
-              <span style="
-                padding: 3px 10px;
-                background: rgba(193,57,43,0.1);
-                color: #C1392B;
-                border-radius: 100px;
-                font-size: 11px;
-                font-weight: 500;
-              ">
-                ${pandal.distanceKm.toFixed(1)} km away
-              </span>
-              ` : '<span></span>'}
-              <a href="https://www.google.com/maps/dir/?api=1&destination=${pandal.lat},${pandal.lng}" target="_blank" rel="noreferrer" style="
-                color: #3b82f6;
-                text-decoration: underline;
-                font-size: 12px;
-                font-weight: 600;
-              ">Get Directions ↗</a>
-            </div>
-          </div>
-        `, {
-          maxWidth: 260,
-          className: 'custom-popup',
-        });
+        .addTo(map);
 
       if (onClick) {
         marker.on('click', () => onClick(pandal));
