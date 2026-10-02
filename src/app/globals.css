@@ -916,3 +916,26 @@ html { font-size: clamp(13px, 1.8vw, 16px); }
     border-radius: 14px !important;
   }
 }
+
+/* ── Global Interactive Micro-Animations ── */
+button, a, [role="button"], select {
+  will-change: transform, filter;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              filter 0.3s ease, 
+              opacity 0.3s ease, 
+              background-color 0.3s ease, 
+              color 0.3s ease;
+}
+
+/* Satisfying 'squish' effect on click across the whole site */
+button:active, a:active, [role="button"]:active, select:active, .glass-input:active {
+  transform: scale(0.96) !important;
+  transition: transform 0.05s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Subtle glowing lift for desktop hover */
+@media (hover: hover) {
+  button:hover:not(:disabled) {
+    filter: brightness(1.15);
+  }
+}
