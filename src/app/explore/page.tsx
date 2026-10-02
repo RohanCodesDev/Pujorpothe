@@ -227,12 +227,13 @@ export default function ExplorePage() {
         {/* List View */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
           {displayedPandals.map((pandal, i) => (
-            <div key={pandal.id} style={{
+            <div key={pandal.id} className="stagger-fade-in-up" style={{
               display: 'flex',
               alignItems: 'flex-start',
               gap: '32px',
               borderBottom: i < displayedPandals.length - 1 ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
-              paddingBottom: i < displayedPandals.length - 1 ? '32px' : '0'
+              paddingBottom: i < displayedPandals.length - 1 ? '32px' : '0',
+              animationDelay: `${i * 0.05}s`
             }}>
               <div style={{
                 fontFamily: 'var(--font-display)',

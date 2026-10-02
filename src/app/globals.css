@@ -86,14 +86,17 @@ h1, h2, h3, h4 {
    SCROLLBAR
    ========================================= */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--ivory-dark);
+  background: #000000;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--vermilion);
-  border-radius: 3px;
+  background: rgba(254, 240, 138, 0.4);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(254, 240, 138, 0.7);
 }
 
 /* =========================================
@@ -938,4 +941,56 @@ button:active, a:active, [role="button"]:active, select:active, .glass-input:act
   button:hover:not(:disabled) {
     filter: brightness(1.15);
   }
+}
+
+/* ── Staggered Scroll Animations ── */
+.stagger-fade-in-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fade-in-up-stagger 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes fade-in-up-stagger {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Back to Top Button ── */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(254, 240, 138, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(254, 240, 138, 0.3);
+  color: #fef08a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  z-index: 999;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4), inset 0 0 10px rgba(254,240,138,0.1);
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.back-to-top-btn:hover {
+  background: rgba(254, 240, 138, 0.3);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6), inset 0 0 15px rgba(254,240,138,0.2);
+  transform: translateY(-2px) scale(1.05);
 }

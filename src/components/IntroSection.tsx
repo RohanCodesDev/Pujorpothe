@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 export default function IntroSection() {
   const router = useRouter();
+
   return (
     <section
       id="intro"
@@ -221,6 +222,10 @@ export default function IntroSection() {
         @keyframes spin-slow {
           from { transform: translate(50%, -50%) rotate(0deg); }
           to { transform: translate(50%, -50%) rotate(360deg); }
+        }
+        @keyframes spin-center {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
         .glass-btn {
           background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.02));

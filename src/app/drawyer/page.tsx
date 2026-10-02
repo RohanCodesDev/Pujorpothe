@@ -275,8 +275,8 @@ export default function DrawyerPage() {
                     href={`https://www.google.com/maps/dir/?api=1&destination=${pandal.lat},${pandal.lng}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="pandal-row"
-                    style={{ textDecoration: 'none' }}
+                    className="pandal-row stagger-fade-in-up"
+                    style={{ textDecoration: 'none', animationDelay: `${index * 0.04}s` }}
                   >
                     {/* Circular image */}
                     <div className="pandal-avatar">

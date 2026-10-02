@@ -60,11 +60,23 @@ export default function Navbar() {
         {/* Desktop nav */}
         {!isHome && (
           <div className="nav-desktop" style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-            {NAV_LINKS.map(item => (
-              <Link key={item.href} href={item.href} style={{ fontFamily: 'var(--font-bengali)', fontSize: 15, fontWeight: 500, color: textColor, textDecoration: 'none', transition: 'color 0.3s ease', letterSpacing: '0.02em' }} className="nav-link">
-                {item.label}
-              </Link>
-            ))}
+            {NAV_LINKS.map(item => {
+              const isActive = pathname === item.href;
+              return (
+                <Link key={item.href} href={item.href} style={{ 
+                  fontFamily: 'var(--font-bengali)', 
+                  fontSize: 15, 
+                  fontWeight: 500, 
+                  color: isActive ? '#fef08a' : textColor, 
+                  textShadow: isActive ? '0 0 10px rgba(254, 240, 138, 0.4)' : 'none',
+                  textDecoration: 'none', 
+                  transition: 'color 0.3s ease', 
+                  letterSpacing: '0.02em' 
+                }} className="nav-link">
+                  {item.label}
+                </Link>
+              );
+            })}
             <Link href="/explore" style={{ padding: '9px 22px', background: 'var(--vermilion)', color: '#fff', borderRadius: 4, fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 500, letterSpacing: '0.06em', textDecoration: 'none', transition: 'all 0.2s ease' }}>
               Explore Now
             </Link>
@@ -114,11 +126,17 @@ export default function Navbar() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '1.5rem', flex: 1 }}>
-          {NAV_LINKS.map(item => (
-            <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className="sidebar-link">
-              {item.label}
-            </Link>
-          ))}
+          {NAV_LINKS.map(item => {
+            const isActive = pathname === item.href;
+            return (
+              <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className={`sidebar-link ${isActive ? 'active' : ''}`} style={{
+                color: isActive ? '#fef08a' : '#fff',
+                textShadow: isActive ? '0 0 10px rgba(254, 240, 138, 0.4)' : 'none',
+              }}>
+                {item.label}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Mobile Menu Footer */}
