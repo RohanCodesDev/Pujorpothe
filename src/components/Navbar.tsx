@@ -34,13 +34,14 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
-  const textColor = scrolled && !isDarkPage ? 'var(--charcoal)' : '#fff';
+  // The entire app is dark-themed, so text should always remain light
+  const textColor = '#fff';
 
   if (isHome) return null;
 
   return (
     <>
-      <nav className={`navbar ${scrolled ? 'scrolled' : 'transparent'}`} style={{ justifyContent: 'space-between' }}>
+      <nav className={`navbar ${scrolled ? 'scrolled liquid-glass' : 'transparent'}`} style={{ justifyContent: 'space-between' }}>
 
         {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
@@ -51,7 +52,7 @@ export default function Navbar() {
             <div style={{ fontFamily: 'var(--font-bengali)', fontSize: 20, fontWeight: 600, color: textColor, lineHeight: 1, transition: 'color 0.3s ease' }}>
               পুজোর পথে
             </div>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: 11, color: scrolled && !isDarkPage ? 'var(--gold)' : 'rgba(201, 168, 76, 0.85)', letterSpacing: '0.1em', transition: 'color 0.3s ease' }}>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 11, color: 'rgba(201, 168, 76, 0.9)', letterSpacing: '0.1em', transition: 'color 0.3s ease' }}>
               Discover the Puja · Follow the Path
             </div>
           </div>

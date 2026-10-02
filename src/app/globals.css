@@ -1,8 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Serif+Bengali:wght@100..900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Josefin+Sans:wght@300;400;500;600;700&display=swap');
-
-/* =========================================
-   DESIGN TOKENS
-   ========================================= */
+/* Typography variables are now injected directly via next/font in layout.tsx */
 :root {
   /* Colors */
   --ivory: #FAF7F2;
@@ -21,12 +17,6 @@
   --muted-green-light: #6B8F67;
   --cream: #FDF8EF;
   --warm-white: #FFFBF5;
-
-  /* Typography */
-  --font-bengali: 'Hind Siliguri', 'Noto Serif Bengali', sans-serif;
-  --font-bengali-serif: 'Noto Serif Bengali', serif;
-  --font-display: 'Cormorant Garamond', serif;
-  --font-body: 'Josefin Sans', sans-serif;
 
   /* Spacing */
   --nav-height: 72px;
@@ -54,8 +44,28 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto !important; /* Lenis overrides this */
   font-size: 16px;
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }
 
 body {
@@ -300,11 +310,13 @@ h1, h2, h3, h4 {
 }
 
 .navbar.scrolled {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  background: rgba(15, 10, 8, 0.75);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .navbar.transparent {

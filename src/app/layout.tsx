@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
+import { Hind_Siliguri, Noto_Serif_Bengali, Cormorant_Garamond, Josefin_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import BackToTop from "@/components/BackToTop";
 import GlobalFooter from "@/components/GlobalFooter";
+import LenisScroll from "@/components/LenisScroll";
+
+const hindSiliguri = Hind_Siliguri({ subsets: ["bengali"], weight: ["300", "400", "500", "600", "700"], variable: "--font-bengali" });
+const notoSerifBengali = Noto_Serif_Bengali({ subsets: ["bengali"], weight: ["300", "400", "500", "600", "700"], variable: "--font-bengali-serif" });
+const cormorant = Cormorant_Garamond({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], style: ["normal", "italic"], variable: "--font-display" });
+const josefin = Josefin_Sans({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], variable: "--font-body" });
 
 export const metadata: Metadata = {
   title: "পুজোর পথে — Discover the Puja, Follow the Path",
@@ -34,14 +41,9 @@ export default function RootLayout({
   return (
     <html lang="bn">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Serif+Bengali:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Josefin+Sans:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
       </head>
-      <body>
+      <body className={`${hindSiliguri.variable} ${notoSerifBengali.variable} ${cormorant.variable} ${josefin.variable}`}>
+        <LenisScroll />
         <div id="desktop-blocker">
           <div className="desktop-blocker-message">
             <h2>This Site was designed for Mobile Devices.</h2>

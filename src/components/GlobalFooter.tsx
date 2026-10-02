@@ -21,7 +21,7 @@ export default function GlobalFooter() {
       zIndex: 10,
       opacity: 0.8
     }}>
-      Made with love by Rohan
+      Made with love by RohanCodesDev
     </footer>
   );
 }

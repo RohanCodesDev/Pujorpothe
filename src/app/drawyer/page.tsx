@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import Image from 'next/image';
 import { pandals } from '@/lib/data';
 
 // Helper: proxies Wikimedia Commons images through our Next.js API route.
@@ -281,16 +282,14 @@ export default function DrawyerPage() {
                     {/* Circular image */}
                     <div className="pandal-avatar">
                       {!hasError ? (
-                        <img
+                        <Image
                           src={imgSrc}
                           alt={pandal.name}
+                          fill
+                          sizes="(max-width: 640px) 72px, 56px"
+                          style={{ objectFit: 'cover' }}
+                          unoptimized
                           onError={() => handleImgError(pandal.id)}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            borderRadius: '50%',
-                          }}
                         />
                       ) : (
                         <div className="pandal-avatar-fallback">
@@ -363,6 +362,7 @@ export default function DrawyerPage() {
 
         /* Circular avatar */
         .pandal-avatar {
+          position: relative;
           flex-shrink: 0;
           width: 56px;
           height: 56px;
