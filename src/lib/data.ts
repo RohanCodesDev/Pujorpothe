@@ -37,7 +37,8 @@ export type PandalStyle =
   | 'Contemporary'
   | 'Artistic'
   | 'Heritage'
-  | 'Eco';
+  | 'Eco'
+  | 'Large scale';
 
 export type ExperienceTag = 
   | 'Family-friendly'

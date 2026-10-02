@@ -2,9 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { pandals, getRegionInfo, imageMap } from '@/lib/data';
-import dynamic from 'next/dynamic';
-
-const MapView = dynamic(() => import('@/components/MapView'), { ssr: false });
+import MapView from '@/components/MapView';
+import PandalCard from '@/components/PandalCard';
 
 interface Params { pandalId: string }
 
