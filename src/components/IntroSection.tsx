@@ -2,6 +2,8 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
 export default function IntroSection() {
   // ============================================================================
@@ -15,18 +17,32 @@ export default function IntroSection() {
     taglineBottomMargin: '-9rem',     // Margin to pull the "Your GuideBook..." tagline closer to the Hero Text
     wishTextTopMargin: '-85px',       // Margin to pull the Wish Text closer to the Hero Text
     wishToShubhoGap: '1.25rem',       // Gap between the English wish text and "Shubho Sharodiya"
+    mandalaSize: '400px',             // Base size of the background mandala
+    mandalaYOffset: '50%',            // How much to push the mandala down. 50% = half. >50% pushes it further down.
   };
   // ============================================================================
 
   const router = useRouter();
+  const mandalaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (mandalaRef.current) {
+      // 🌀 GSAP Spin Animation
+      gsap.to(mandalaRef.current, {
+        rotation: 360,
+        duration: 100, // Extremely slow spin (100 seconds)
+        repeat: -1,
+        ease: 'none'
+      });
+    }
+  }, []);
 
   return (
     <section
       id="intro"
       style={{
         position: 'relative',
-        height: '100vh',
-        minHeight: 600,
+        height: '100dvh', // Use dvh to fit the exact dynamic viewport on mobile (solves scroll/footer issues)
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -44,27 +60,28 @@ export default function IntroSection() {
         animation: 'pulse 8s infinite alternate ease-in-out',
         pointerEvents: 'none',
       }} />
-      {/* Background Mandala */}
+      {/* Background Mandala - outer div handles positioning, inner div handles rotation via GSAP */}
       <div
-        className="intro-mandala"
         style={{
           position: 'absolute',
-          right: 0,
-          top: '50%',
-          transform: 'translate(50%, -50%)',
-          width: '700px',
-          height: '800px',
+          bottom: 0,
+          left: '50%',
+          transform: `translate(-50%, ${LAYOUT.mandalaYOffset})`,
+          width: LAYOUT.mandalaSize,
+          height: LAYOUT.mandalaSize,
           opacity: 0.07,
           zIndex: 2,
           pointerEvents: 'none',
-          animation: 'spin-slow 175s linear infinite',
-        }}>
-        <Image
-          src="/mandaka.svg"
-          alt="Decorative Mandala"
-          fill
-          style={{ objectFit: 'contain' }}
-        />
+        }}
+      >
+        <div ref={mandalaRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
+          <Image
+            src="/mandaka.svg"
+            alt="Decorative Mandala"
+            fill
+            style={{ objectFit: 'contain' }}
+          />
+        </div>
       </div>
 
       {/* Durga Silhouette Image with Glow */}

@@ -69,6 +69,24 @@ body {
 }
 
 /* =========================================
+   MANDALA SPIN ANIMATION (global — not scoped)
+   ========================================= */
+@keyframes mandala-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.intro-mandala {
+  animation: mandala-rotate 100s linear infinite !important;
+}
+
+/* Lock landing page to exactly 100dvh — no scroll */
+body:has(#intro) {
+  overflow: hidden;
+  height: 100dvh;
+}
+
+/* =========================================
    TYPOGRAPHY
    ========================================= */
 .font-bengali { font-family: var(--font-bengali); }
