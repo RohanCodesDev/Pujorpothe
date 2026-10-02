@@ -1,359 +1,319 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import PandalCard from '@/components/PandalCard';
-import { pandals, regions, type Pandal, type Region, type PandalStyle } from '@/lib/data';
+import { pandals, regions, type Pandal } from '@/lib/data';
+import { blueLineStops, greenLineStops, orangeLineStops, purpleLineStops } from '@/app/metro/page';
 
-// Dynamic import for map (no SSR)
 const MapView = dynamic(() => import('@/components/MapView'), { ssr: false });
 
-const STYLE_FILTERS: PandalStyle[] = ['Traditional', 'Contemporary', 'Artistic', 'Heritage', 'Eco'];
-const CROWD_FILTERS = [
-  { label: '🟢 Quiet', value: 'quiet' },
-  { label: '🟡 Moderate', value: 'moderate' },
-  { label: '🔴 Busy', value: 'busy' },
-];
-const DISTANCE_FILTERS = [
-  { label: '< 5 km', value: 5 },
-  { label: '< 10 km', value: 10 },
-  { label: 'Any', value: Infinity },
-];
+// Haversine distance
+function getDistanceKm(lat1: number, lng1: number, lat2: number, lng2: number) {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
 
 export default function ExplorePage() {
   const [search, setSearch] = useState('');
-  const [selectedRegion, setSelectedRegion] = useState<Region | 'all'>('all');
-  const [selectedStyles, setSelectedStyles] = useState<PandalStyle[]>([]);
-  const [selectedCrowd, setSelectedCrowd] = useState<string | null>(null);
-  const [selectedPandalId, setSelectedPandalId] = useState<string | undefined>();
-  const [mapView, setMapView] = useState(true);
-  const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('split');
+  const [filterType, setFilterType] = useState<'region' | 'metro'>('region');
+  const [selectedFilterValue, setSelectedFilterValue] = useState('all');
+  
   const [useLocation, setUseLocation] = useState(false);
   const [userLat, setUserLat] = useState<number | null>(null);
   const [userLng, setUserLng] = useState<number | null>(null);
-  const [locationError, setLocationError] = useState('');
+  const [locationLoading, setLocationLoading] = useState(false);
+  
+  const [visibleCount, setVisibleCount] = useState(5);
+  const [showMap, setShowMap] = useState(false);
 
-  const toggleStyle = (style: PandalStyle) => {
-    setSelectedStyles(prev =>
-      prev.includes(style) ? prev.filter(s => s !== style) : [...prev, style]
-    );
-  };
+  const metroLines = ['Blue Line', 'Green Line', 'Orange Line', 'Purple Line'];
 
-  const handleUseLocation = () => {
-    if (!navigator.geolocation) {
-      setLocationError('Geolocation not supported by your browser.');
-      return;
-    }
+  const metroMapping: Record<string, string[]> = useMemo(() => {
+    const toId = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    
+    return {
+      'Blue Line': blueLineStops.flatMap(s => s.pandals.map(toId)),
+      'Green Line': greenLineStops.flatMap(s => s.pandals.map(toId)),
+      'Orange Line': orangeLineStops.flatMap(s => s.pandals.map(toId)),
+      'Purple Line': purpleLineStops.flatMap(s => s.pandals.map(toId))
+    };
+  }, []);
+
+  const handleLocate = () => {
+    if (!navigator.geolocation) return;
+    setLocationLoading(true);
     navigator.geolocation.getCurrentPosition(
-      pos => {
+      (pos) => {
         setUserLat(pos.coords.latitude);
         setUserLng(pos.coords.longitude);
         setUseLocation(true);
-        setLocationError('');
+        setLocationLoading(false);
+        // Reset visibility to top 5 when location changes
+        setVisibleCount(5);
       },
-      () => setLocationError('Could not get your location. Please try again.')
+      () => {
+        alert('Location access denied or unavailable.');
+        setLocationLoading(false);
+      }
     );
   };
 
-  // Distance calculation
-  function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number) {
-    const R = 6371;
-    const dLat = ((lat2 - lat1) * Math.PI) / 180;
-    const dLng = ((lng2 - lng1) * Math.PI) / 180;
-    const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLng / 2) ** 2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  }
-
-  const filteredPandals = useMemo(() => {
-    let result = pandals;
+  const processedPandals = useMemo(() => {
+    let result = [...pandals];
 
     if (search.trim()) {
       const q = search.toLowerCase();
-      result = result.filter(
-        p =>
-          p.name.toLowerCase().includes(q) ||
-          p.bengaliName.includes(q) ||
-          p.description.toLowerCase().includes(q)
-      );
+      result = result.filter(p => p.name.toLowerCase().includes(q) || p.bengaliName.includes(q));
     }
 
-    if (selectedRegion !== 'all') {
-      result = result.filter(p => p.region === selectedRegion);
-    }
-
-    if (selectedStyles.length > 0) {
-      result = result.filter(p => selectedStyles.some(s => p.style.includes(s)));
-    }
-
-    if (selectedCrowd) {
-      result = result.filter(p => p.crowd === selectedCrowd);
+    if (selectedFilterValue !== 'all') {
+      if (filterType === 'region') {
+        result = result.filter(p => p.region === selectedFilterValue);
+      } else {
+        result = result.filter(p => metroMapping[selectedFilterValue]?.includes(p.id));
+      }
     }
 
     if (useLocation && userLat !== null && userLng !== null) {
       result = result.map(p => ({
         ...p,
-        distanceKm: Math.round(haversineKm(userLat, userLng, p.lat, p.lng) * 10) / 10,
-      })).sort((a, b) => (a.distanceKm ?? 99) - (b.distanceKm ?? 99));
+        distanceKm: Math.round(getDistanceKm(userLat, userLng, p.lat, p.lng) * 10) / 10
+      })).sort((a, b) => (a.distanceKm || 0) - (b.distanceKm || 0));
     }
 
     return result;
-  }, [search, selectedRegion, selectedStyles, selectedCrowd, useLocation, userLat, userLng]);
+  }, [search, filterType, selectedFilterValue, useLocation, userLat, userLng]);
 
-  const mapCenter: [number, number] = userLat && userLng
-    ? [userLat, userLng]
-    : [22.5726, 88.3639];
+  const displayedPandals = processedPandals.slice(0, visibleCount);
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--ivory)', paddingTop: 'var(--nav-height)' }}>
-
-      {/* Page Header */}
-      <div style={{
-        background: 'var(--charcoal)',
-        padding: '40px 32px 32px',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='40' cy='40' r='35' fill='none' stroke='%23C9A84C' stroke-width='0.4' stroke-opacity='0.1'/%3E%3C/svg%3E")`,
-        }} />
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: 1280, margin: '0 auto' }}>
-          <div style={{
-            fontFamily: 'var(--font-bengali)',
-            fontSize: 13,
-            color: 'var(--gold)',
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            marginBottom: 6,
-          }}>পুজো অন্বেষণ</div>
-          <h1 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(28px, 5vw, 44px)',
-            color: '#fff',
-            fontWeight: 500,
-            marginBottom: 8,
-          }}>
-            Explore Pandals
-          </h1>
-          <p style={{
+    <main style={{
+      position: 'relative',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      paddingTop: 'calc(var(--nav-height) + 40px)',
+      paddingBottom: '6rem',
+    }}>
+      <div style={{ maxWidth: '900px', width: '100%', margin: '0 auto', padding: '0 24px', zIndex: 10 }}>
+        
+        {/* Header & Immersive Search */}
+        <div style={{ marginBottom: '60px' }}>
+          <input 
+            type="text" 
+            placeholder="Search pandals..." 
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{
+              width: '100%',
+              background: 'transparent',
+              border: 'none',
+              color: '#fff',
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(3rem, 8vw, 5rem)',
+              outline: 'none',
+              padding: '0',
+              marginBottom: '24px',
+              lineHeight: 1
+            }}
+          />
+          
+          {/* Controls (Filters & Actions) - purely text based, no borders */}
+          <div style={{ 
+            display: 'flex', 
+            gap: '32px', 
+            alignItems: 'center', 
+            flexWrap: 'wrap',
             fontFamily: 'var(--font-body)',
-            fontSize: 15,
-            color: 'rgba(255,255,255,0.55)',
+            fontSize: '1rem',
+            color: 'rgba(255,255,255,0.6)'
           }}>
-            {filteredPandals.length} pandal{filteredPandals.length !== 1 ? 's' : ''} found
-            {useLocation && userLat ? ' · sorted by distance from you' : ''}
-          </p>
-        </div>
-      </div>
-
-      {/* Main Layout */}
-      <div style={{
-        maxWidth: '100%',
-        display: viewMode === 'split' ? 'grid' : 'block',
-        gridTemplateColumns: viewMode === 'split' ? '420px 1fr' : '1fr',
-        height: 'calc(100vh - var(--nav-height) - 116px)',
-        minHeight: 600,
-      }}>
-
-        {/* ====== LEFT PANEL ====== */}
-        {viewMode !== 'map' && (
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            background: 'var(--warm-white)',
-            borderRight: '1px solid var(--ivory-dark)',
-            overflow: 'hidden',
-          }}>
-
-            {/* Search & Location */}
-            <div style={{ padding: '20px 20px 0' }}>
-              <div className="search-box" style={{ marginBottom: 12 }}>
-                <span style={{ color: 'var(--charcoal-light)', fontSize: 16 }}>🔍</span>
-                <input
-                  id="pandal-search"
-                  type="text"
-                  placeholder="পুজো খুঁজুন... Search pandals"
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                />
-                {search && (
-                  <button
-                    onClick={() => setSearch('')}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--charcoal-light)' }}
-                  >✕</button>
-                )}
-              </div>
-
-              {/* Location button */}
-              <button
-                id="use-location-btn"
-                onClick={handleUseLocation}
+            
+            {/* Filter Dropdowns styled as inline text */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>Show</span>
+              <select 
+                value={filterType}
+                onChange={(e) => {
+                  setFilterType(e.target.value as 'region' | 'metro');
+                  setSelectedFilterValue('all');
+                }}
                 style={{
-                  width: '100%',
-                  padding: '11px 16px',
-                  background: useLocation ? 'rgba(74, 103, 65, 0.1)' : 'rgba(193, 57, 43, 0.08)',
-                  border: `1.5px solid ${useLocation ? 'var(--muted-green)' : 'rgba(193, 57, 43, 0.2)'}`,
-                  borderRadius: 8,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  cursor: 'pointer',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 13,
-                  fontWeight: 500,
-                  color: useLocation ? 'var(--muted-green)' : 'var(--vermilion)',
-                  transition: 'all 0.2s ease',
-                  marginBottom: 8,
+                  appearance: 'none', WebkitAppearance: 'none',
+                  background: 'transparent', border: 'none', color: '#fff',
+                  fontFamily: 'var(--font-body)', fontSize: '1rem', outline: 'none', cursor: 'pointer',
+                  paddingRight: '16px',
+                  backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='rgba(255,255,255,0.5)' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>")`,
+                  backgroundRepeat: 'no-repeat', backgroundPosition: 'right center'
                 }}
               >
-                <span>📍</span>
-                <span>{useLocation ? '✓ Using your location' : 'Use my location'}</span>
-              </button>
-              {locationError && (
-                <div style={{ fontSize: 12, color: 'var(--vermilion)', marginBottom: 8 }}>
-                  {locationError}
-                </div>
-              )}
+                <option value="region" style={{ background: '#111' }}>regions</option>
+                <option value="metro" style={{ background: '#111' }}>metro lines</option>
+              </select>
+              
+              <span>:</span>
+              <select 
+                value={selectedFilterValue}
+                onChange={(e) => setSelectedFilterValue(e.target.value)}
+                style={{
+                  appearance: 'none', WebkitAppearance: 'none',
+                  background: 'transparent', border: 'none', color: '#fff',
+                  fontFamily: 'var(--font-body)', fontSize: '1rem', outline: 'none', cursor: 'pointer',
+                  paddingRight: '16px',
+                  backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='rgba(255,255,255,0.5)' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>")`,
+                  backgroundRepeat: 'no-repeat', backgroundPosition: 'right center'
+                }}
+              >
+                <option value="all" style={{ background: '#111' }}>All</option>
+                {filterType === 'region' 
+                  ? regions.map(r => <option key={r.id} value={r.id} style={{ background: '#111' }}>{r.name}</option>)
+                  : metroLines.map(m => <option key={m} value={m} style={{ background: '#111' }}>{m}</option>)
+                }
+              </select>
             </div>
 
-            {/* Filters */}
-            <div style={{ padding: '12px 20px', borderBottom: '1px solid var(--ivory-dark)' }}>
-              {/* Region filter */}
-              <div style={{ marginBottom: 12 }}>
-                <div style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: 'var(--charcoal-light)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Region</div>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  <button
-                    className={`filter-chip ${selectedRegion === 'all' ? 'active' : ''}`}
-                    onClick={() => setSelectedRegion('all')}
-                  >All</button>
-                  {regions.map(r => (
-                    <button
-                      key={r.id}
-                      className={`filter-chip ${selectedRegion === r.id ? 'active' : ''}`}
-                      onClick={() => setSelectedRegion(r.id)}
-                      style={{ fontFamily: 'var(--font-bengali)' }}
-                    >
-                      {r.bengaliName}
-                    </button>
-                  ))}
-                </div>
-              </div>
+            {/* Action Links */}
+            <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+              <span 
+                onClick={handleLocate}
+                style={{
+                  color: useLocation ? '#fef08a' : 'inherit',
+                  cursor: locationLoading ? 'wait' : 'pointer',
+                  transition: 'color 0.2s',
+                  display: 'flex', alignItems: 'center', gap: '6px'
+                }}
+                onMouseOver={(e) => { if(!useLocation) e.currentTarget.style.color = '#fff'; }}
+                onMouseOut={(e) => { if(!useLocation) e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; }}
+              >
+                <span style={{ fontSize: '1.2rem' }}>⌖</span>
+                {locationLoading ? 'Locating...' : useLocation ? 'Sorted by Nearby' : 'Near Me'}
+              </span>
 
-              {/* Style filter */}
-              <div style={{ marginBottom: 12 }}>
-                <div style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: 'var(--charcoal-light)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Style</div>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  {STYLE_FILTERS.map(style => (
-                    <button
-                      key={style}
-                      className={`filter-chip ${selectedStyles.includes(style) ? 'active' : ''}`}
-                      onClick={() => toggleStyle(style)}
-                    >
-                      {style}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Crowd filter */}
-              <div>
-                <div style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: 'var(--charcoal-light)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Crowd</div>
-                <div style={{ display: 'flex', gap: 6 }}>
-                  {CROWD_FILTERS.map(c => (
-                    <button
-                      key={c.value}
-                      className={`filter-chip ${selectedCrowd === c.value ? 'active' : ''}`}
-                      onClick={() => setSelectedCrowd(selectedCrowd === c.value ? null : c.value)}
-                    >
-                      {c.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <span 
+                onClick={() => setShowMap(!showMap)}
+                style={{
+                  cursor: 'pointer',
+                  transition: 'color 0.2s',
+                  display: 'flex', alignItems: 'center', gap: '6px'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.color = '#fff'}
+                onMouseOut={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
+              >
+                <span style={{ fontSize: '1.2rem' }}>◖</span>
+                {showMap ? 'Hide Map' : 'Map View'}
+              </span>
             </div>
-
-            {/* Results */}
-            <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-              {filteredPandals.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--charcoal-light)', fontFamily: 'var(--font-body)' }}>
-                  <div style={{ fontSize: 32, marginBottom: 12 }}>🔍</div>
-                  <div style={{ fontFamily: 'var(--font-bengali)', fontSize: 16, marginBottom: 4 }}>কোনো ফলাফল পাওয়া যায়নি</div>
-                  <div style={{ fontSize: 13 }}>No pandals match your filters.</div>
-                </div>
-              ) : (
-                filteredPandals.map(pandal => (
-                  <div
-                    key={pandal.id}
-                    onClick={() => setSelectedPandalId(pandal.id)}
-                    style={{
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                    }}
-                  >
-                    <PandalCard pandal={pandal} showDistance={useLocation} />
-                  </div>
-                ))
-              )}
-            </div>
+            
           </div>
-        )}
+        </div>
 
-        {/* ====== MAP PANEL ====== */}
-        {viewMode !== 'list' && (
-          <div style={{ position: 'relative', flex: 1 }}>
-            <MapView
-              pandals={filteredPandals}
-              center={mapCenter}
+        {/* Map View */}
+        {showMap && (
+          <div style={{ height: '400px', marginBottom: '60px', borderRadius: '8px', overflow: 'hidden' }}>
+             <MapView
+              pandals={processedPandals}
+              center={userLat && userLng ? [userLat, userLng] : [22.5726, 88.3639]}
               zoom={13}
-              selectedPandalId={selectedPandalId}
-              onPandalClick={p => setSelectedPandalId(p.id)}
               height="100%"
             />
           </div>
         )}
-      </div>
 
-      {/* View toggle FAB */}
-      <div style={{
-        position: 'fixed',
-        bottom: 32,
-        right: 32,
-        display: 'flex',
-        gap: 8,
-        zIndex: 50,
-      }}>
-        {[
-          { mode: 'split' as const, label: '⧉ Split', id: 'view-split' },
-          { mode: 'list' as const, label: '☰ List', id: 'view-list' },
-          { mode: 'map' as const, label: '🗺 Map', id: 'view-map' },
-        ].map(({ mode, label, id }) => (
-          <button
-            key={mode}
-            id={id}
-            onClick={() => setViewMode(mode)}
-            style={{
-              padding: '10px 18px',
-              background: viewMode === mode ? 'var(--vermilion)' : 'var(--charcoal)',
-              color: '#fff',
-              border: 'none',
-              borderRadius: 100,
-              fontFamily: 'var(--font-body)',
-              fontSize: 13,
-              fontWeight: 500,
-              cursor: 'pointer',
-              boxShadow: '0 4px 16px rgba(42,36,32,0.3)',
-              transition: 'all 0.2s ease',
-            }}
-          >
-            {label}
-          </button>
-        ))}
+        {/* List View */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '60px' }}>
+          {displayedPandals.map((pandal, i) => (
+              <div key={pandal.id} style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '32px'
+              }}>
+                <div style={{ 
+                  fontFamily: 'var(--font-display)', 
+                  fontSize: '1.2rem', 
+                  color: 'rgba(255,255,255,0.2)', 
+                  paddingTop: '8px',
+                  userSelect: 'none' 
+                }}>
+                  {(i + 1).toString().padStart(2, '0')}
+                </div>
+                
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', color: '#fff', marginBottom: '4px', lineHeight: 1.1 }}>
+                    {pandal.name} 
+                    <span style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.4)', marginLeft: '12px', fontWeight: 'normal' }}>{pandal.bengaliName}</span>
+                  </h3>
+                  
+                  <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '16px' }}>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: '#fef08a', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                      {pandal.region.replace('-', ' ')}
+                    </span>
+                    {pandal.distanceKm !== undefined && (
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'rgba(255,255,255,0.4)' }}>
+                        • {pandal.distanceKm.toFixed(1)} km away
+                      </span>
+                    )}
+                  </div>
+
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', color: 'rgba(255,255,255,0.6)', maxWidth: '650px', marginBottom: '24px', lineHeight: 1.6 }}>
+                    {pandal.description}
+                  </p>
+                  
+                  <a 
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${pandal.lat},${pandal.lng}`} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '0.95rem',
+                      color: '#fff',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      transition: 'opacity 0.2s',
+                      opacity: 0.8
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
+                    onMouseOut={(e) => e.currentTarget.style.opacity = '0.8'}
+                  >
+                    Directions ↗
+                  </a>
+                </div>
+              </div>
+            ))}
+
+          {displayedPandals.length === 0 && (
+            <div style={{ padding: '60px 0', textAlign: 'center', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-body)', fontSize: '1.2rem' }}>
+              No pandals found.
+            </div>
+          )}
+        </div>
+
+        {/* View More */}
+        {visibleCount < processedPandals.length && (
+          <div style={{ textAlign: 'center', marginTop: '80px' }}>
+            <button
+              onClick={() => setVisibleCount(prev => prev + 5)}
+              style={{
+                background: 'transparent',
+                color: 'rgba(255,255,255,0.5)',
+                border: 'none',
+                fontFamily: 'var(--font-body)',
+                fontSize: '1.2rem',
+                cursor: 'pointer',
+                transition: 'color 0.2s ease',
+              }}
+              onMouseOver={(e) => e.currentTarget.style.color = '#fff'}
+              onMouseOut={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}
+            >
+              Load More ↓
+            </button>
+          </div>
+        )}
       </div>
-    </div>
+    </main>
   );
 }

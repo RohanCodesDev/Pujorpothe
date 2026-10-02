@@ -23,10 +23,12 @@ export default function MapView({
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
+  const isInitializingRef = useRef(false);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !mapRef.current) return;
-    if (mapInstanceRef.current) return; // Already initialised
+    if (mapInstanceRef.current || isInitializingRef.current) return; // Already initialised
+    isInitializingRef.current = true;
 
     // Dynamically import Leaflet
     import('leaflet').then(L => {
@@ -45,10 +47,9 @@ export default function MapView({
         attributionControl: false,
       });
 
-      // Custom tile layer with warm sepia-like look
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '© CartoDB',
-        subdomains: 'abcd',
+      // Standard free OSM tiles
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
         maxZoom: 19,
       }).addTo(map);
 
@@ -117,7 +118,7 @@ export default function MapView({
               ${pandal.bengaliName}
             </div>
             <div style="font-size: 12px; color: #5C5047; margin-bottom: 10px; line-height: 1.5;">
-              ${pandal.description.slice(0, 100)}...
+              ${pandal.description.slice(0, 80)}...
             </div>
             <div style="display: flex; gap: 8px; align-items: center; justify-content: space-between;">
               <span style="
@@ -130,12 +131,12 @@ export default function MapView({
               ">
                 ${pandal.style[0]}
               </span>
-              <a href="/pandal/${pandal.id}" style="
-                color: #C1392B;
-                text-decoration: none;
+              <a href="https://www.google.com/maps/dir/?api=1&destination=${pandal.lat},${pandal.lng}" target="_blank" rel="noreferrer" style="
+                color: #3b82f6;
+                text-decoration: underline;
                 font-size: 12px;
                 font-weight: 600;
-              ">View details →</a>
+              ">Get Directions ↗</a>
             </div>
           </div>
         `, {
@@ -156,6 +157,15 @@ export default function MapView({
       <div ref={mapRef} style={{ width: '100%', height: '100%', borderRadius: 12 }} />
       <style jsx global>{`
         @import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
+        
+        /* CSS Trick to make standard OSM tiles dark mode */
+        .leaflet-layer,
+        .leaflet-control-zoom-in,
+        .leaflet-control-zoom-out,
+        .leaflet-control-attribution {
+          filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+        }
+
         .custom-popup .leaflet-popup-content-wrapper {
           border-radius: 10px;
           box-shadow: 0 8px 32px rgba(42,36,32,0.18);

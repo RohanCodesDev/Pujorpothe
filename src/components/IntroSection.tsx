@@ -1,8 +1,10 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function IntroSection() {
+  const router = useRouter();
   return (
     <section
       id="intro"
@@ -147,7 +149,7 @@ export default function IntroSection() {
             Shubho Sharodiya.
           </p>
           <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
-            <button className="glass-btn">
+            <button className="glass-btn" onClick={() => router.push('/drawyer')}>
               Start hopping
             </button>
           </div>

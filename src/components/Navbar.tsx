@@ -12,6 +12,8 @@ export default function Navbar() {
   const pathname = usePathname();
   const isHome = pathname === '/';
 
+  const isDarkPage = pathname === '/' || pathname === '/drawyer';
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', onScroll);
@@ -41,7 +43,7 @@ export default function Navbar() {
             fontFamily: 'var(--font-bengali)',
             fontSize: 20,
             fontWeight: 600,
-            color: scrolled ? 'var(--charcoal)' : '#fff',
+            color: scrolled && !isDarkPage ? 'var(--charcoal)' : '#fff',
             lineHeight: 1,
             transition: 'color 0.3s ease',
           }}>
@@ -50,7 +52,7 @@ export default function Navbar() {
           <div style={{
             fontFamily: 'var(--font-display)',
             fontSize: 11,
-            color: scrolled ? 'var(--gold)' : 'rgba(201, 168, 76, 0.85)',
+            color: scrolled && !isDarkPage ? 'var(--gold)' : 'rgba(201, 168, 76, 0.85)',
             letterSpacing: '0.1em',
             transition: 'color 0.3s ease',
           }}>
@@ -63,10 +65,9 @@ export default function Navbar() {
       {!isHome && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
           {[
-            { label: 'অন্বেষণ', href: '/explore' },
-            { label: 'অঞ্চল', href: '/regions' },
-            { label: 'পুজো পথ', href: '/trails' },
-            { label: 'পরিচয়', href: '/about' },
+            { label: 'Metro Guide', href: '/metro' },
+            { label: 'Explore Pandals', href: '/explore' },
+            { label: 'Helplines', href: '/helplines' },
           ].map(item => (
             <Link
               key={item.href}
@@ -75,7 +76,7 @@ export default function Navbar() {
                 fontFamily: 'var(--font-bengali)',
                 fontSize: 15,
                 fontWeight: 500,
-                color: scrolled ? 'var(--charcoal)' : 'rgba(255,255,255,0.9)',
+                color: scrolled && !isDarkPage ? 'var(--charcoal)' : 'rgba(255,255,255,0.9)',
                 textDecoration: 'none',
                 transition: 'color 0.3s ease',
                 letterSpacing: '0.02em',

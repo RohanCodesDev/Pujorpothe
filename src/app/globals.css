@@ -60,8 +60,8 @@ html {
 
 body {
   font-family: var(--font-body);
-  background-color: var(--ivory);
-  color: var(--charcoal);
+  background: linear-gradient(175deg, #2a0508 0%, #1c0305 22%, #100102 48%, #060001 72%, #000000 100%) fixed;
+  color: #fff;
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -279,9 +279,11 @@ h1, h2, h3, h4 {
 }
 
 .navbar.scrolled {
-  background: rgba(250, 247, 242, 0.95);
-  backdrop-filter: blur(12px);
-  box-shadow: var(--shadow-sm);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
 .navbar.transparent {
