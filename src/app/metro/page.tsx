@@ -344,8 +344,8 @@ export default function MetroGuidePage() {
                     <div key={pandal} 
                     onClick={() => openModal(pandal, station.stop)}
                     style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '1.15rem',
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '1.45rem',
                       fontWeight: 500,
                       color: 'rgba(255,255,255,0.85)',
                       display: 'flex',
