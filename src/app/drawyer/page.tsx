@@ -438,6 +438,34 @@ export default function DrawyerPage() {
           color: rgba(255, 255, 255, 0.38);
           line-height: 1.45;
         }
+
+        /* ── Mobile Size Boosts ── */
+        @media (max-width: 640px) {
+          .pandal-row {
+            padding: 1.4rem 0.5rem;
+            gap: 1.5rem;
+          }
+          .pandal-avatar {
+            width: 72px;
+            height: 72px;
+          }
+          .pandal-avatar-fallback {
+            font-size: 1.7rem;
+          }
+          .pandal-name {
+            font-size: 1.75rem;
+            margin-bottom: 0.25rem;
+          }
+          .pandal-bengali {
+            font-size: 1.15rem;
+          }
+          .pandal-region, .pandal-desc {
+            font-size: 0.95rem;
+          }
+          .pandal-dir-tag {
+            font-size: 0.85rem;
+          }
+        }
       `}</style>
     </main>
   );
